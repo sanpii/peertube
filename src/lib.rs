@@ -38,30 +38,22 @@ impl Api {
     }
 
     async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
-        let url = format!("{}/api/v1{}", self.base_url, path);
-        let client = reqwest::Client::new();
-        let mut request = client.get(&url)
-            .query(&params);
-
-        if let Some(auth) = auth {
-            request = request.bearer_auth(&auth.access_token);
-        }
-
-        let response = request.send()
-            .await?;
-
-        if response.status().is_success() {
-            Ok(response.json().await?)
-        } else {
-            Err(crate::Error::Peertube(response.json().await?))
-        }
+        self.request(reqwest::Method::GET, path, params, auth).await
     }
 
     async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+        self.request(reqwest::Method::POST, path, params, auth).await
+    }
+
+    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, method: reqwest::Method, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
         let url = format!("{}/api/v1{}", self.base_url, path);
         let client = reqwest::Client::new();
-        let mut request = client.post(&url)
-            .form(&params);
+        let mut request = client.request(method.clone(), &url);
+
+        request = match method {
+            reqwest::Method::GET => request.query(&params),
+            _ => request.form(&params),
+        };
 
         if let Some(auth) = auth {
             request = request.bearer_auth(&auth.access_token);
