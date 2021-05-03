@@ -37,3 +37,13 @@ pub struct Channels {
     pub start: Option<usize>,
     pub with_stats: Option<bool>,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+pub struct Auth {
+    pub client_id: String,
+    pub client_secret: String,
+    pub grant_type: String,
+    pub response_type: String,
+    pub username: String,
+    pub password: String,
+}

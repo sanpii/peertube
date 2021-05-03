@@ -23,12 +23,51 @@ impl Api {
         }
     }
 
-    async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P) -> crate::Result<T> {
+    pub async fn auth(&self, username: &str, password: &str) -> crate::Result<Token> {
+        let oauth_clients: OauthClient = self.get("/oauth-clients/local", (), None).await?;
+        let params = param::Auth {
+            client_id: oauth_clients.client_id,
+            client_secret: oauth_clients.client_secret,
+            username: username.to_string(),
+            password: password.to_string(),
+            grant_type: "password".to_string(),
+            response_type: "code".to_string(),
+        };
+
+        self.post("/users/token", &params, None).await
+    }
+
+    async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
         let url = format!("{}/api/v1{}", self.base_url, path);
         let client = reqwest::Client::new();
-        let response = client.get(&url)
-            .query(&params)
-            .send()
+        let mut request = client.get(&url)
+            .query(&params);
+
+        if let Some(auth) = auth {
+            request = request.bearer_auth(&auth.access_token);
+        }
+
+        let response = request.send()
+            .await?;
+
+        if response.status().is_success() {
+            Ok(response.json().await?)
+        } else {
+            Err(crate::Error::Peertube(response.json().await?))
+        }
+    }
+
+    async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+        let url = format!("{}/api/v1{}", self.base_url, path);
+        let client = reqwest::Client::new();
+        let mut request = client.post(&url)
+            .form(&params);
+
+        if let Some(auth) = auth {
+            request = request.bearer_auth(&auth.access_token);
+        }
+
+        let response = request.send()
             .await?;
 
         if response.status().is_success() {
@@ -43,25 +82,38 @@ include!("_accounts.rs");
 
 #[cfg(test)]
 mod test {
+    fn instance() -> String {
+        std::env::var("INSTANCE").unwrap()
+    }
+
+    fn username() -> String {
+        std::env::var("USERNAME").unwrap()
+    }
+
+    fn password() -> String {
+        std::env::var("PASSWORD").unwrap()
+    }
+
     pub(crate) fn api() -> crate::Api {
         env_logger::try_init().ok();
-        crate::Api::new("https://peertube.cpy.re")
+        dotenv::dotenv().ok();
+        crate::Api::new(&instance())
     }
 
     #[test]
     fn account() {
         let api = crate::test::api();
         let account = tokio_test::block_on(
-            api.account("chocobozzz")
+            api.account(&username())
         ).unwrap();
-        assert_eq!(account.display_name, "chocobozzz");
+        assert_eq!(account.display_name, username());
     }
 
     #[test]
     fn account_videos() {
         let api = crate::test::api();
         let videos = tokio_test::block_on(
-            api.account_videos("chocobozzz", &crate::param::Videos::default())
+            api.account_videos(&username(), &crate::param::Videos::default())
         );
         assert!(videos.is_ok());
     }
@@ -82,8 +134,20 @@ mod test {
     fn account_video_channels() {
         let api = crate::test::api();
         let channels = tokio_test::block_on(
-            api.account_video_channels("chocobozzz", &crate::param::Channels::default())
+            api.account_video_channels(&username(), &crate::param::Channels::default())
         );
         assert!(channels.is_ok());
+    }
+
+    #[test]
+    fn auth() {
+        let api = crate::test::api();
+        let auth = tokio_test::block_on(
+            api.auth(
+                &username(),
+                &password(),
+            )
+        );
+        assert!(auth.is_ok());
     }
 }

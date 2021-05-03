@@ -138,5 +138,19 @@ pub struct Channel {
 #[derive(Debug, serde::Deserialize)]
 pub struct Err {
     pub error: String,
-    pub code: String,
+    pub code: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct OauthClient {
+    pub client_id: String,
+    pub client_secret: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct Token {
+    pub access_token: String,
+    pub token_type: String,
+    pub expires_in: u32,
+    pub refresh_token: String,
 }
