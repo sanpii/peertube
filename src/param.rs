@@ -28,3 +28,12 @@ pub enum VideoFilter {
     AllLocal,
     All,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Channels {
+    pub count: Option<usize>,
+    pub sort: Option<String>,
+    pub start: Option<usize>,
+    pub with_stats: Option<bool>,
+}

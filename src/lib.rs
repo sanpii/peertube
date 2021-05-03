@@ -75,4 +75,13 @@ mod test {
         ).unwrap();
         assert_eq!(accounts.data.len(), 2);
     }
+
+    #[test]
+    fn account_video_channels() {
+        let api = crate::test::api();
+        let channels = tokio_test::block_on(
+            api.account_video_channels("chocobozzz", &crate::param::Channels::default())
+        );
+        assert!(channels.is_ok());
+    }
 }

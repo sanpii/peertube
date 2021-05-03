@@ -41,7 +41,7 @@ pub struct Video {
     pub blacklisted: Option<bool>,
     pub blacklisted_reason: Option<String>,
     pub category: Category,
-    pub channel: Channel,
+    pub channel: ChannelSummary,
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub description: String,
     pub dislikes: u32,
@@ -78,7 +78,7 @@ pub struct Category {
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Channel {
+pub struct ChannelSummary {
     pub avatar: Option<Avatar>,
     pub display_name: String,
     pub host: Option<String>,
@@ -124,4 +124,13 @@ pub struct State {
 #[derive(Debug, serde::Deserialize)]
 pub struct UserHistory {
     current_time: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Channel {
+    pub description: Option<String>,
+    pub display_name: String,
+    pub is_local: bool,
+    pub owner_account: Account,
 }
