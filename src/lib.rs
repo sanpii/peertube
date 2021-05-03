@@ -29,11 +29,13 @@ impl Api {
         let response = client.get(&url)
             .query(&params)
             .send()
-            .await?
-            .json()
             .await?;
 
-        Ok(response)
+        if response.status().is_success() {
+            Ok(response.json().await?)
+        } else {
+            Err(crate::Error::Peertube(response.json().await?))
+        }
     }
 }
 

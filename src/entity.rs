@@ -134,3 +134,9 @@ pub struct Channel {
     pub is_local: bool,
     pub owner_account: Account,
 }
+
+#[derive(Debug, serde::Deserialize)]
+pub struct Err {
+    pub error: String,
+    pub code: String,
+}
