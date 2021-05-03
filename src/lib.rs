@@ -59,7 +59,7 @@ mod test {
     fn account_videos() {
         let api = crate::test::api();
         let videos = tokio_test::block_on(
-            api.account_videos("chocobozzz")
+            api.account_videos("chocobozzz", &crate::param::Videos::default())
         );
         assert!(videos.is_ok());
     }
