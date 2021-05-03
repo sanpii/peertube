@@ -42,13 +42,23 @@ mod test {
     }
 
     #[test]
+    fn account() {
+        let api = crate::test::api();
+        let account = tokio_test::block_on(
+            api.account("chocobozzz")
+        ).unwrap();
+        assert_eq!(account.display_name, "chocobozzz");
+    }
+
+    #[test]
     fn accounts() {
         let api = crate::test::api();
-        let fut = api.accounts(crate::param::Accounts {
-            count: Some(2),
-            .. Default::default()
-        });
-        let accounts = tokio_test::block_on(fut).unwrap();
+        let accounts = tokio_test::block_on(
+            api.accounts(crate::param::Accounts {
+                count: Some(2),
+                .. Default::default()
+            })
+        ).unwrap();
         assert_eq!(accounts.data.len(), 2);
     }
 }

@@ -1,3 +1,11 @@
+pub struct None;
+
+impl ToString for None {
+    fn to_string(&self) -> String {
+        String::new()
+    }
+}
+
 #[derive(Debug, Default)]
 pub struct Accounts {
     pub count: Option<usize>,

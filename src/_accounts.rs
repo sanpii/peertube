@@ -24,6 +24,10 @@ pub struct Avatar {
 }
 
 impl Api {
+    pub async fn account(&self, name: &str) -> crate::Result<Account> {
+        self.get(&format!("/accounts/{}", name), &crate::param::None).await
+    }
+
     pub async fn accounts(&self, params: crate::param::Accounts) -> crate::Result<crate::Pager<Account>> {
         self.get("/accounts", &params).await
     }
