@@ -1,7 +1,9 @@
 pub mod param;
 
+mod entity;
 mod errors;
 
+use entity::*;
 use errors::*;
 
 #[derive(Debug, serde::Deserialize)]
@@ -48,6 +50,15 @@ mod test {
             api.account("chocobozzz")
         ).unwrap();
         assert_eq!(account.display_name, "chocobozzz");
+    }
+
+    #[test]
+    fn account_videos() {
+        let api = crate::test::api();
+        let videos = tokio_test::block_on(
+            api.account_videos("chocobozzz")
+        );
+        assert!(videos.is_ok());
     }
 
     #[test]
