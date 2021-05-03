@@ -23,9 +23,12 @@ impl Api {
         }
     }
 
-    async fn get<T: for<'de> serde::Deserialize<'de>, P: ToString>(&self, path: &str, params: &P) -> crate::Result<T> {
-        let url = format!("{}/api/v1{}?{}", self.base_url, path, params.to_string());
-        let response = reqwest::get(&url)
+    async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P) -> crate::Result<T> {
+        let url = format!("{}/api/v1{}", self.base_url, path);
+        let client = reqwest::Client::new();
+        let response = client.get(&url)
+            .query(&params)
+            .send()
             .await?
             .json()
             .await?;
@@ -65,7 +68,7 @@ mod test {
     fn accounts() {
         let api = crate::test::api();
         let accounts = tokio_test::block_on(
-            api.accounts(crate::param::Accounts {
+            api.accounts(&crate::param::Accounts {
                 count: Some(2),
                 .. Default::default()
             })
