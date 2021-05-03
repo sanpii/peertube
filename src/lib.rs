@@ -150,4 +150,19 @@ mod test {
         );
         assert!(auth.is_ok());
     }
+
+    #[test]
+    fn accountratings() {
+        let api = crate::test::api();
+        let auth = tokio_test::block_on(
+            api.auth(
+                &username(),
+                &password(),
+            )
+        ).unwrap();
+        let ratings = tokio_test::block_on(
+            api.account_ratings(&auth, &username(), &crate::param::Ratings::default())
+        );
+        assert!(ratings.is_ok());
+    }
 }

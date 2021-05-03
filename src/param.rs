@@ -39,6 +39,22 @@ pub struct Channels {
 }
 
 #[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Ratings {
+    pub count: Option<usize>,
+    pub rating: Option<Rating>,
+    pub sort: Option<String>,
+    pub start: Option<usize>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Rating {
+    Like,
+    Dislike,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
 pub struct Auth {
     pub client_id: String,
     pub client_secret: String,

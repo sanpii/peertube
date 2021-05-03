@@ -14,4 +14,8 @@ impl Api {
     pub async fn account_video_channels(&self, name: &str, params: &crate::param::Channels) -> crate::Result<crate::Pager<crate::Channel>> {
         self.get(&format!("/accounts/{}/video-channels", name), params, None).await
     }
+
+    pub async fn account_ratings(&self, auth: &crate::Token, name: &str, params: &crate::param::Ratings) -> crate::Result<crate::Pager<crate::Channel>> {
+        self.get(&format!("/accounts/{}/ratings", name), params, Some(auth)).await
+    }
 }
