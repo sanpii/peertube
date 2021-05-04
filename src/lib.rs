@@ -1,10 +1,9 @@
+pub mod data;
 pub mod param;
 pub mod services;
 
-mod entity;
 mod errors;
 
-pub use entity::*;
 pub use errors::*;
 
 #[derive(Debug, serde::Deserialize)]
@@ -35,8 +34,8 @@ impl Api {
         }
     }
 
-    pub async fn auth(&self, username: &str, password: &str) -> crate::Result<Token> {
-        let oauth_clients: OauthClient = Self::get(&self.config, "/oauth-clients/local", (), None).await?;
+    pub async fn auth(&self, username: &str, password: &str) -> crate::Result<data::Token> {
+        let oauth_clients: data::OauthClient = Self::get(&self.config, "/oauth-clients/local", (), None).await?;
         let params = param::Auth {
             client_id: oauth_clients.client_id,
             client_secret: oauth_clients.client_secret,
@@ -49,15 +48,15 @@ impl Api {
         Self::post(&self.config, "/users/token", &params, None).await
     }
 
-    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
         Self::request(reqwest::Method::GET, config, path, params, auth).await
     }
 
-    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
         Self::request(reqwest::Method::POST, config, path, params, auth).await
     }
 
-    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
         let url = format!("{}/api/v1{}", config.base_url, path);
         let client = reqwest::Client::new();
         let mut request = client.request(method.clone(), &url);
