@@ -83,15 +83,15 @@ impl Api {
 
 #[cfg(test)]
 mod test {
-    fn instance() -> String {
+    pub(crate) fn instance() -> String {
         std::env::var("INSTANCE").unwrap()
     }
 
-    fn username() -> String {
+    pub(crate) fn username() -> String {
         std::env::var("USERNAME").unwrap()
     }
 
-    fn password() -> String {
+    pub(crate) fn password() -> String {
         std::env::var("PASSWORD").unwrap()
     }
 
@@ -99,71 +99,5 @@ mod test {
         env_logger::try_init().ok();
         dotenv::dotenv().ok();
         crate::Api::new(&instance())
-    }
-
-    #[test]
-    fn account() {
-        let api = crate::test::api();
-        let account = tokio_test::block_on(
-            api.accounts.get(&username())
-        ).unwrap();
-        assert_eq!(account.display_name, username());
-    }
-
-    #[test]
-    fn account_videos() {
-        let api = crate::test::api();
-        let videos = tokio_test::block_on(
-            api.accounts.videos(&username(), &crate::param::Videos::default())
-        );
-        assert!(videos.is_ok());
-    }
-
-    #[test]
-    fn accounts() {
-        let api = crate::test::api();
-        let accounts = tokio_test::block_on(
-            api.accounts.all(&crate::param::Accounts {
-                count: Some(2),
-                .. Default::default()
-            })
-        ).unwrap();
-        assert_eq!(accounts.data.len(), 2);
-    }
-
-    #[test]
-    fn account_video_channels() {
-        let api = crate::test::api();
-        let channels = tokio_test::block_on(
-            api.accounts.video_channels(&username(), &crate::param::Channels::default())
-        );
-        assert!(channels.is_ok());
-    }
-
-    #[test]
-    fn auth() {
-        let api = crate::test::api();
-        let auth = tokio_test::block_on(
-            api.auth(
-                &username(),
-                &password(),
-            )
-        );
-        assert!(auth.is_ok());
-    }
-
-    #[test]
-    fn accountratings() {
-        let api = crate::test::api();
-        let auth = tokio_test::block_on(
-            api.auth(
-                &username(),
-                &password(),
-            )
-        ).unwrap();
-        let ratings = tokio_test::block_on(
-            api.accounts.ratings(&auth, &username(), &crate::param::Ratings::default())
-        );
-        assert!(ratings.is_ok());
     }
 }
