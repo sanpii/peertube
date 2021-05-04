@@ -136,7 +136,7 @@ pub struct Channel {
 }
 
 #[derive(Debug, serde::Deserialize)]
-pub struct Err {
+pub struct Error {
     pub error: String,
     pub code: Option<String>,
 }
