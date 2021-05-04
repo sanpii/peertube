@@ -55,7 +55,7 @@ pub enum Rating {
 }
 
 #[derive(Debug, Default, serde::Serialize)]
-pub struct Auth {
+pub(crate) struct Auth {
     pub client_id: String,
     pub client_secret: String,
     pub grant_type: String,
