@@ -142,7 +142,7 @@ pub struct Error {
 }
 
 #[derive(Debug, serde::Deserialize)]
-pub struct OauthClient {
+pub(crate) struct OauthClient {
     pub client_id: String,
     pub client_secret: String,
 }
