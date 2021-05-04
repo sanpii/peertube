@@ -1,10 +1,11 @@
 pub mod param;
+pub mod services;
 
 mod entity;
 mod errors;
 
-use entity::*;
-use errors::*;
+pub use entity::*;
+pub use errors::*;
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Pager<T> {
@@ -12,19 +13,30 @@ pub struct Pager<T> {
     data: Vec<T>,
 }
 
-pub struct Api {
+#[derive(Clone)]
+struct Config {
     base_url: String,
+}
+
+pub struct Api {
+    config: Config,
+    pub accounts: services::Accounts,
 }
 
 impl Api {
     pub fn new(base_url: &str) -> Self {
-        Self {
+        let config = Config {
             base_url: base_url.to_string(),
+        };
+
+        Self {
+            accounts: services::Accounts::new(&config),
+            config,
         }
     }
 
     pub async fn auth(&self, username: &str, password: &str) -> crate::Result<Token> {
-        let oauth_clients: OauthClient = self.get("/oauth-clients/local", (), None).await?;
+        let oauth_clients: OauthClient = Self::get(&self.config, "/oauth-clients/local", (), None).await?;
         let params = param::Auth {
             client_id: oauth_clients.client_id,
             client_secret: oauth_clients.client_secret,
@@ -34,19 +46,19 @@ impl Api {
             response_type: "code".to_string(),
         };
 
-        self.post("/users/token", &params, None).await
+        Self::post(&self.config, "/users/token", &params, None).await
     }
 
-    async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
-        self.request(reqwest::Method::GET, path, params, auth).await
+    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+        Self::request(reqwest::Method::GET, config, path, params, auth).await
     }
 
-    async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
-        self.request(reqwest::Method::POST, path, params, auth).await
+    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+        Self::request(reqwest::Method::POST, config, path, params, auth).await
     }
 
-    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(&self, method: reqwest::Method, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
-        let url = format!("{}/api/v1{}", self.base_url, path);
+    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, path: &str, params: P, auth: Option<&Token>) -> crate::Result<T> {
+        let url = format!("{}/api/v1{}", config.base_url, path);
         let client = reqwest::Client::new();
         let mut request = client.request(method.clone(), &url);
 
@@ -69,8 +81,6 @@ impl Api {
         }
     }
 }
-
-include!("_accounts.rs");
 
 #[cfg(test)]
 mod test {
@@ -96,7 +106,7 @@ mod test {
     fn account() {
         let api = crate::test::api();
         let account = tokio_test::block_on(
-            api.account(&username())
+            api.accounts.get(&username())
         ).unwrap();
         assert_eq!(account.display_name, username());
     }
@@ -105,7 +115,7 @@ mod test {
     fn account_videos() {
         let api = crate::test::api();
         let videos = tokio_test::block_on(
-            api.account_videos(&username(), &crate::param::Videos::default())
+            api.accounts.videos(&username(), &crate::param::Videos::default())
         );
         assert!(videos.is_ok());
     }
@@ -114,7 +124,7 @@ mod test {
     fn accounts() {
         let api = crate::test::api();
         let accounts = tokio_test::block_on(
-            api.accounts(&crate::param::Accounts {
+            api.accounts.all(&crate::param::Accounts {
                 count: Some(2),
                 .. Default::default()
             })
@@ -126,7 +136,7 @@ mod test {
     fn account_video_channels() {
         let api = crate::test::api();
         let channels = tokio_test::block_on(
-            api.account_video_channels(&username(), &crate::param::Channels::default())
+            api.accounts.video_channels(&username(), &crate::param::Channels::default())
         );
         assert!(channels.is_ok());
     }
@@ -153,7 +163,7 @@ mod test {
             )
         ).unwrap();
         let ratings = tokio_test::block_on(
-            api.account_ratings(&auth, &username(), &crate::param::Ratings::default())
+            api.accounts.ratings(&auth, &username(), &crate::param::Ratings::default())
         );
         assert!(ratings.is_ok());
     }
