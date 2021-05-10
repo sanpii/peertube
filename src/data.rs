@@ -117,7 +117,7 @@ pub struct Privacy {
     pub label: String,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
 pub struct ScheduledUpdate {
     update_at: String,
     privacy: u32,
@@ -349,4 +349,31 @@ pub enum UserNotificationType {
     VideoAutoBlacklistForModerators = 12,
     NewInstanceFollower = 13,
     AutoInstanceFollowing = 14,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub(crate) struct Description {
+    pub description: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum NewContent {
+    Video(NewVideo),
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewVideo {
+    pub id: u32,
+    pub uuid: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Live {
+    pub rtmp_url: String,
+    pub stream_key: String,
+    pub save_replay: bool,
+    pub permanent_live: bool,
 }

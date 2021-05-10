@@ -17,6 +17,7 @@ impl History {
             path: "/users/me/history/videos".into(),
             params: pagination,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -32,6 +33,7 @@ impl History {
                 before_date: *before_date,
             },
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;

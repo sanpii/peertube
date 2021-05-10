@@ -23,6 +23,47 @@ struct Request<S: serde::Serialize> {
     path: String,
     params: S,
     auth: Option<data::Token>,
+    form: Option<reqwest::multipart::Form>,
+}
+
+impl<S: serde::Serialize> Request<S> {
+    fn into_request(self, method: reqwest::Method, base_url: &str) -> crate::Result<reqwest::RequestBuilder> {
+        let Request { path, params, auth, form } = self;
+        let url = format!("{}/api/v1{}", base_url, path);
+        let client = reqwest::Client::new();
+        let mut request = client.request(method.clone(), &url);
+
+        request = match (method, path.as_str(), form) {
+            (reqwest::Method::GET, _, _) => request.query(&params),
+            (reqwest::Method::DELETE, _, _) => request.form(&params),
+            (reqwest::Method::POST, "/users/token", None) => request.form(&params),
+            (reqwest::Method::POST, _, Some(mut form)) => {
+                match serde_json::to_value(&params)? {
+                    serde_json::Value::Object(map) => for (k, v) in map.iter() {
+                        form = form.text(k.to_string(), v.to_string());
+                    }
+                    _ => unimplemented!(),
+                };
+
+                request.multipart(form)
+            },
+            _ => {
+                let body = serde_json::to_string(&params)?;
+
+                if body == "null" {
+                    request
+                } else {
+                    request.json(&params)
+                }
+            },
+        };
+
+        if let Some(auth) = auth {
+            request = request.bearer_auth(&auth.access_token);
+        }
+
+        Ok(request)
+    }
 }
 
 impl From<&str> for Request<()> {
@@ -37,6 +78,7 @@ impl From<String> for Request<()> {
             path,
             params: (),
             auth: None,
+            form: None,
         }
     }
 }
@@ -44,8 +86,9 @@ impl From<String> for Request<()> {
 pub struct Api {
     config: Config,
     pub accounts: services::Accounts,
-    pub users: services::Users,
     pub me: services::Me,
+    pub users: services::Users,
+    pub videos: services::Videos,
 }
 
 impl Api {
@@ -56,8 +99,9 @@ impl Api {
 
         Self {
             accounts: services::Accounts::new(&config),
-            users: services::Users::new(&config),
             me: services::Me::new(&config),
+            users: services::Users::new(&config),
+            videos: services::Videos::new(&config),
             config,
         }
     }
@@ -77,6 +121,7 @@ impl Api {
             path: "/users/token".to_string(),
             params,
             auth: None,
+            form: None,
         };
         Self::post(&self.config, request).await
     }
@@ -97,33 +142,9 @@ impl Api {
         Self::request(reqwest::Method::PUT, config, request).await
     }
 
-    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, param: Request<P>) -> crate::Result<T> {
-        let Request { path, params, auth } = param;
-        let url = format!("{}/api/v1{}", config.base_url, path);
-        let client = reqwest::Client::new();
-        let mut request = client.request(method.clone(), &url);
-
-        request = match (method, path.as_str()) {
-            (reqwest::Method::GET, _) => request.query(&params),
-            (reqwest::Method::DELETE, _) => request.form(&params),
-            (reqwest::Method::POST, "/users/token") => request.form(&params),
-            (reqwest::Method::POST, "/videos/upload") => request.form(&params),
-            _ => {
-                let body = serde_json::to_string(&params)?;
-
-                if body == "null" {
-                    request
-                } else {
-                    request.json(&params)
-                }
-            },
-        };
-
-        if let Some(auth) = auth {
-            request = request.bearer_auth(&auth.access_token);
-        }
-
-        let response = request.send()
+    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, request: Request<P>) -> crate::Result<T> {
+        let response = request.into_request(method, &config.base_url)?
+            .send()
             .await?;
 
         if response.status().is_success() {

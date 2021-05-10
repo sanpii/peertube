@@ -27,6 +27,7 @@ impl Accounts {
             path: format!("/accounts/{}/videos", name),
             params,
             auth: None,
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -40,6 +41,7 @@ impl Accounts {
             path: "/accounts".to_string(),
             params: pagination,
             auth: None,
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -53,6 +55,7 @@ impl Accounts {
             path: format!("/accounts/{}/video-channels", name),
             params,
             auth: None,
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -66,6 +69,7 @@ impl Accounts {
             path: format!("/accounts/{}/ratings", name),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await

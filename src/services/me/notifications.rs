@@ -17,6 +17,7 @@ impl Notifications {
             path: "/users/me/notifications".into(),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -32,6 +33,7 @@ impl Notifications {
                 ids: ids.to_vec(),
             },
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
@@ -47,6 +49,7 @@ impl Notifications {
             path: "/users/me/notifications/read-all".into(),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
@@ -62,6 +65,7 @@ impl Notifications {
             path: "/users/me/notification-settings".into(),
             params: settings,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;

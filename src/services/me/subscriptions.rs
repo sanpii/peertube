@@ -17,6 +17,7 @@ impl Subscriptions {
             path: "/users/me/subscriptions".into(),
             params: pagination,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -32,6 +33,7 @@ impl Subscriptions {
                 uri: uri.to_string(),
             },
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
@@ -49,6 +51,7 @@ impl Subscriptions {
             path: "/users/me/subscriptions/exist".into(),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -62,6 +65,7 @@ impl Subscriptions {
             path: "/users/me/subscriptions/videos".into(),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -75,6 +79,7 @@ impl Subscriptions {
             path: format!("/users/me/subscriptions/{}", handle),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -88,6 +93,7 @@ impl Subscriptions {
             path: format!("/users/me/subscriptions/{}", handle),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::delete(&self.config, request).await?;

@@ -31,6 +31,7 @@ impl Me {
             path: "/users/me".into(),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -44,6 +45,7 @@ impl Me {
             path: "/users/me".into(),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
@@ -59,6 +61,7 @@ impl Me {
             path: "/users/me/videos/imports".into(),
             params: pagination,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -72,6 +75,7 @@ impl Me {
             path: "/users/me/video-quota-used".into(),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -85,6 +89,7 @@ impl Me {
             path: format!("/users/me/videos/{}/rating", id),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -98,6 +103,7 @@ impl Me {
             path: "/users/me/videos".into(),
             params: pagination,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -113,6 +119,7 @@ impl Me {
                 avatarfile: avatarfile.to_string(),
             },
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::post(&self.config, request).await
@@ -126,6 +133,7 @@ impl Me {
             path: "/users/me/avatar".into(),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
@@ -141,6 +149,7 @@ impl Me {
             path: "/users/me/abuses".into(),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await

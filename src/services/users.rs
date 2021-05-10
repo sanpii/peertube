@@ -17,6 +17,7 @@ impl Users {
             path: "/users".to_string(),
             params: user.clone(),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let data = crate::Api::post(&self.config, request).await?;
@@ -34,6 +35,7 @@ impl Users {
             path: "/users".to_string(),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -47,6 +49,7 @@ impl Users {
             path: format!("/users/{}", id),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::delete(&self.config, request).await?;
@@ -62,6 +65,7 @@ impl Users {
             path: format!("/users/{}", id),
             params: (),
             auth: Some(auth.clone()),
+            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -75,6 +79,7 @@ impl Users {
             path: format!("/users/{}", id),
             params,
             auth: Some(auth.clone()),
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
@@ -90,6 +95,7 @@ impl Users {
             path: "/users/register".to_string(),
             params,
             auth: None,
+            form: None,
         };
 
         let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;

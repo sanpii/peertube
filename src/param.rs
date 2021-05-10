@@ -14,8 +14,6 @@ pub struct Videos {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub category_one_of: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub count: Option<usize>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<VideoFilter>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_live: Option<bool>,
@@ -240,4 +238,124 @@ pub enum NotificationSettingsValue {
 #[derive(Debug, serde::Serialize)]
 pub(crate) struct History {
     pub before_date: chrono::DateTime<chrono::offset::Utc>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Video {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nsfw: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub originally_published_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previewfile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<Privacy>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_update: Option<crate::data::ScheduledUpdate>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thumbnailfile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub twait_transcoding: Option<String>,
+}
+
+#[derive(Debug, serde_repr::Serialize_repr)]
+#[repr(u8)]
+pub enum Privacy {
+    Public = 1,
+    Unlisted = 2,
+    Private = 3,
+    Internal = 4,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Watching {
+    pub current_time: u32,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewVideo {
+    pub channel_id: String,
+    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nsfw: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub originally_published_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previewfile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<Privacy>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_update: Option<crate::data::ScheduledUpdate>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<String>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thumbnailfile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub twait_transcoding: Option<String>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Import {
+    #[serde(flatten)]
+    pub video: NewVideo,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_url: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub torrentfile: Option<String>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Live {
+    #[serde(flatten)]
+    pub video: NewVideo,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub download_enabled: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permanent_live: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub previewfile: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub save_replay: Option<bool>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LiveSetting {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub save_replay: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permanent_live: Option<bool>,
 }
