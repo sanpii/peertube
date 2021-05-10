@@ -3,8 +3,11 @@ name = "peertube"
 version = "0.0.0"
 authors = ["Sanpi <sanpi@homecomputing.fr>"]
 edition = "2018"
-description = "Peertube API"
+description = "Peertube API client"
 license = "MIT"
+repository = "https://github.com/sanpii/peertube"
+categories = ["web-programming::http-client"]
+keywords = ["peertube"]
 
 [dependencies]
 serde_json = "1.0"
