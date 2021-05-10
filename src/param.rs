@@ -63,3 +63,75 @@ pub(crate) struct Auth {
     pub username: String,
     pub password: String,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewUser {
+    pub email: String,
+    pub password: String,
+    pub role: Option<crate::data::Role>,
+    pub username: String,
+    pub video_quota: i32,
+    pub video_quota_daily: i32,
+    pub admin_flags: AdminFlag,
+    pub channel_name: String,
+}
+
+#[derive(Debug, serde_repr::Serialize_repr)]
+#[repr(u8)]
+pub enum AdminFlag {
+    None = 0,
+    BypassVideoBlacklist = 1,
+}
+
+impl Default for AdminFlag {
+    fn default() -> Self {
+        Self::None
+    }
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+pub struct Users {
+    pub blocked: Option<bool>,
+    pub count: Option<u32>,
+    pub search: Option<String>,
+    pub sort: Option<String>,
+    pub start: Option<u32>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct User {
+    pub id: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin_flags: Option<AdminFlag>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_verified: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub plugin_auth: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<crate::data::Role>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_quota: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_quota_daily: Option<i32>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Register {
+    pub email: String,
+    pub password: String,
+    pub username: String,
+    pub channel: Option<Channel>,
+    pub display_name: Option<String>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Channel {
+    pub name: String,
+    pub display_name: String,
+}

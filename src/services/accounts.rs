@@ -52,7 +52,7 @@ impl Accounts {
 mod test {
     #[test]
     fn account() {
-        let api = crate::test::api();
+        let (api, _) = crate::test::api();
         let account = tokio_test::block_on(
             api.accounts.get(&crate::test::username())
         ).unwrap();
@@ -61,7 +61,7 @@ mod test {
 
     #[test]
     fn account_videos() {
-        let api = crate::test::api();
+        let (api, _) = crate::test::api();
         let videos = tokio_test::block_on(
             api.accounts.videos(&crate::test::username(), &crate::param::Videos::default())
         );
@@ -70,7 +70,7 @@ mod test {
 
     #[test]
     fn accounts() {
-        let api = crate::test::api();
+        let (api, _) = crate::test::api();
         let accounts = tokio_test::block_on(
             api.accounts.all(&crate::param::Accounts {
                 count: Some(2),
@@ -82,7 +82,7 @@ mod test {
 
     #[test]
     fn account_video_channels() {
-        let api = crate::test::api();
+        let (api, _) = crate::test::api();
         let channels = tokio_test::block_on(
             api.accounts.video_channels(&crate::test::username(), &crate::param::Channels::default())
         );
@@ -90,28 +90,10 @@ mod test {
     }
 
     #[test]
-    fn auth() {
-        let api = crate::test::api();
-        let auth = tokio_test::block_on(
-            api.auth(
-                &crate::test::username(),
-                &crate::test::password(),
-            )
-        );
-        assert!(auth.is_ok());
-    }
-
-    #[test]
     fn accountratings() {
-        let api = crate::test::api();
-        let auth = tokio_test::block_on(
-            api.auth(
-                &crate::test::username(),
-                &crate::test::password(),
-            )
-        ).unwrap();
+        let (api, token) = crate::test::api();
         let ratings = tokio_test::block_on(
-            api.accounts.ratings(&auth, &crate::test::username(), &crate::param::Ratings::default())
+            api.accounts.ratings(&token, &crate::test::username(), &crate::param::Ratings::default())
         );
         assert!(ratings.is_ok());
     }

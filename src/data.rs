@@ -1,3 +1,12 @@
+#[derive(Debug)]
+pub(crate) struct Empty;
+
+impl<'de> serde::Deserialize<'de> for Empty {
+    fn deserialize<D: serde::Deserializer<'de>>(_: D) -> Result<Empty, D::Error> {
+        Ok(Empty)
+    }
+}
+
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Account {
@@ -127,21 +136,6 @@ pub struct UserHistory {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Channel {
-    pub description: Option<String>,
-    pub display_name: String,
-    pub is_local: bool,
-    pub owner_account: Account,
-}
-
-#[derive(Debug, serde::Deserialize)]
-pub struct Error {
-    pub error: String,
-    pub code: Option<String>,
-}
-
-#[derive(Debug, serde::Deserialize)]
 pub(crate) struct OauthClient {
     pub client_id: String,
     pub client_secret: String,
@@ -153,4 +147,62 @@ pub struct Token {
     pub token_type: String,
     pub expires_in: u32,
     pub refresh_token: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Data {
+    NewUser(NewUser),
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct NewUser {
+    pub account: AccountId,
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct AccountId {
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct User {
+    pub id: u32,
+    pub username: String,
+    pub email: String,
+    pub plugin_auth: Option<String>,
+    pub theme: String,
+    pub email_verified: Option<bool>,
+    pub nsfw_policy: String,
+    pub web_torrent_enabled: bool,
+    pub auto_play_video: bool,
+    pub role: Role,
+    pub role_label: String,
+    pub video_quota: i32,
+    pub video_quota_daily: i32,
+    pub no_instance_config_warning_modal: bool,
+    pub no_welcome_modal: bool,
+    pub blocked: bool,
+    pub blocked_reason: Option<String>,
+    pub created_at: String,
+    pub account: Account,
+    pub video_channels: Vec<Channel>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Channel {
+    pub description: Option<String>,
+    pub display_name: String,
+    pub is_local: bool,
+}
+
+#[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
+#[repr(u8)]
+pub enum Role {
+    Admin = 0,
+    Moderator = 1,
+    User = 2,
 }

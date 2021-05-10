@@ -20,6 +20,7 @@ struct Config {
 pub struct Api {
     config: Config,
     pub accounts: services::Accounts,
+    pub users: services::Users,
 }
 
 impl Api {
@@ -30,6 +31,7 @@ impl Api {
 
         Self {
             accounts: services::Accounts::new(&config),
+            users: services::Users::new(&config),
             config,
         }
     }
@@ -56,14 +58,24 @@ impl Api {
         Self::request(reqwest::Method::POST, config, path, params, auth).await
     }
 
+    pub(crate) async fn delete<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
+        Self::request(reqwest::Method::DELETE, config, path, params, auth).await
+    }
+
+    pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
+        Self::request(reqwest::Method::PUT, config, path, params, auth).await
+    }
+
     async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
         let url = format!("{}/api/v1{}", config.base_url, path);
         let client = reqwest::Client::new();
         let mut request = client.request(method.clone(), &url);
 
-        request = match method {
-            reqwest::Method::GET => request.query(&params),
-            _ => request.form(&params),
+        request = match (method, path) {
+            (reqwest::Method::GET, _) => request.query(&params),
+            (reqwest::Method::DELETE, _) => request.form(&params),
+            (reqwest::Method::POST, "/users/token") => request.form(&params),
+            _ => request.json(&params),
         };
 
         if let Some(auth) = auth {
@@ -74,9 +86,13 @@ impl Api {
             .await?;
 
         if response.status().is_success() {
-            Ok(response.json().await?)
+            let data = response.json().await?;
+
+            Ok(data)
         } else {
-            Err(crate::Error::Peertube(response.json().await?))
+            let text = response.text().await?;
+
+            Err(crate::Error::Peertube(text))
         }
     }
 }
@@ -95,9 +111,27 @@ mod test {
         std::env::var("PASSWORD").unwrap()
     }
 
-    pub(crate) fn api() -> crate::Api {
-        env_logger::try_init().ok();
+    pub(crate) fn api() -> (crate::Api, crate::data::Token) {
         dotenv::dotenv().ok();
-        crate::Api::new(&instance())
+        env_logger::try_init().ok();
+
+        let api = crate::Api::new(&instance());
+        let token = tokio_test::block_on(
+            api.auth(&username(), &password())
+        ).unwrap();
+
+        (api, token)
+    }
+
+    #[test]
+    fn auth() {
+        let (api, _) = crate::test::api();
+        let auth = tokio_test::block_on(
+            api.auth(
+                &crate::test::username(),
+                &crate::test::password(),
+            )
+        );
+        assert!(auth.is_ok());
     }
 }
