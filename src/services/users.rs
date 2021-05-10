@@ -71,7 +71,6 @@ mod test {
             email: "test@example.org".to_string(),
             password: "123456".to_string(),
             username: "test".to_string(),
-            channel_name: "Default".to_string(),
 
             .. Default::default()
         };

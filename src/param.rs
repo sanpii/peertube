@@ -1,23 +1,37 @@
 #[derive(Debug, Default, serde::Serialize)]
 pub struct Pagination {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<usize>,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Videos {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub category_one_of: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<usize>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<VideoFilter>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub is_live: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub language_one_of: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub license_one_of: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub nsfw: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub skip_count: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sort: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags_all_of: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub tags_one_of: Option<String>,
 }
 
@@ -34,6 +48,7 @@ pub enum VideoFilter {
 pub struct Channels {
     #[serde(flatten)]
     pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub with_stats: Option<bool>,
 }
 
@@ -42,6 +57,7 @@ pub struct Channels {
 pub struct Ratings {
     #[serde(flatten)]
     pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub rating: Option<Rating>,
 }
 
@@ -67,12 +83,13 @@ pub(crate) struct Auth {
 pub struct NewUser {
     pub email: String,
     pub password: String,
-    pub role: Option<crate::data::Role>,
+    pub role: crate::data::Role,
     pub username: String,
     pub video_quota: i32,
     pub video_quota_daily: i32,
     pub admin_flags: AdminFlag,
-    pub channel_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_name: Option<String>,
 }
 
 #[derive(Debug, serde_repr::Serialize_repr)]
@@ -90,7 +107,9 @@ impl Default for AdminFlag {
 
 #[derive(Debug, Default, serde::Serialize)]
 pub struct Users {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub blocked: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub search: Option<String>,
     #[serde(flatten)]
     pub pagination: Pagination,
@@ -122,7 +141,9 @@ pub struct Register {
     pub email: String,
     pub password: String,
     pub username: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
 }
 

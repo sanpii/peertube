@@ -207,6 +207,12 @@ pub enum Role {
     User = 2,
 }
 
+impl Default for Role {
+    fn default() -> Self {
+        Self::User
+    }
+}
+
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Import {
