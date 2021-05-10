@@ -236,3 +236,8 @@ pub enum NotificationSettingsValue {
     Email = 2,
     Both = 3,
 }
+
+#[derive(Debug, serde::Serialize)]
+pub(crate) struct History {
+    pub before_date: chrono::DateTime<chrono::offset::Utc>,
+}

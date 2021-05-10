@@ -1,11 +1,14 @@
-mod subscriptions;
+mod history;
 mod notifications;
+mod subscriptions;
 
+pub use history::*;
 pub use notifications::*;
 pub use subscriptions::*;
 
 pub struct Me {
     config: crate::Config,
+    pub history: History,
     pub notifications: Notifications,
     pub subscriptions: Subscriptions,
 }
@@ -14,6 +17,7 @@ impl Me {
     pub(crate) fn new(config: &crate::Config) -> Self {
         Self {
             config: config.clone(),
+            history: History::new(config),
             notifications: Notifications::new(config),
             subscriptions: Subscriptions::new(config),
         }
