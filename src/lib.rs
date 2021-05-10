@@ -77,7 +77,15 @@ impl Api {
             (reqwest::Method::GET, _) => request.query(&params),
             (reqwest::Method::DELETE, _) => request.form(&params),
             (reqwest::Method::POST, "/users/token") => request.form(&params),
-            _ => request.json(&params),
+            _ => {
+                let body = serde_json::to_string(&params)?;
+
+                if body == "null" {
+                    request
+                } else {
+                    request.json(&params)
+                }
+            },
         };
 
         if let Some(auth) = auth {

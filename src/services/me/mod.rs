@@ -1,9 +1,12 @@
 mod subscriptions;
+mod notifications;
 
+pub use notifications::*;
 pub use subscriptions::*;
 
 pub struct Me {
     config: crate::Config,
+    pub notifications: Notifications,
     pub subscriptions: Subscriptions,
 }
 
@@ -11,6 +14,7 @@ impl Me {
     pub(crate) fn new(config: &crate::Config) -> Self {
         Self {
             config: config.clone(),
+            notifications: Notifications::new(config),
             subscriptions: Subscriptions::new(config),
         }
     }

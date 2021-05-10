@@ -180,9 +180,9 @@ pub struct Abuse {
     #[serde(flatten)]
     pub pagination: Pagination,
     #[serde(skip_serializing_if = "Option::is_none")]
-    id: Option<i32>,
+    pub id: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    state: Option<crate::data::AbuseState>,
+    pub state: Option<crate::data::AbuseState>,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
@@ -195,4 +195,44 @@ pub(crate) struct Avatar {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct Subscription {
     pub uri: String,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Notification {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unread: Option<bool>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+pub(crate) struct Notifications {
+    pub ids: Vec<u32>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NotificationSettings {
+    pub abuse_as_moderator: NotificationSettingsValue,
+    pub auto_instance_following: NotificationSettingsValue,
+    pub blacklist_on_my_video: NotificationSettingsValue,
+    pub comment_mention: NotificationSettingsValue,
+    pub my_video_import_finished: NotificationSettingsValue,
+    pub my_video_published: NotificationSettingsValue,
+    pub new_comment_on_my_video: NotificationSettingsValue,
+    pub new_follow: NotificationSettingsValue,
+    pub new_instance_follower: NotificationSettingsValue,
+    pub new_user_registration: NotificationSettingsValue,
+    pub new_video_from_subscription: NotificationSettingsValue,
+    pub video_auto_blacklist_as_moderator: NotificationSettingsValue,
+}
+
+#[derive(Debug, serde_repr::Serialize_repr)]
+#[repr(u8)]
+pub enum NotificationSettingsValue {
+    None = 0,
+    Web = 1,
+    Email = 2,
+    Both = 3,
 }

@@ -39,8 +39,8 @@ pub struct AccountSummary {
 #[serde(rename_all = "camelCase")]
 pub struct Avatar {
     pub path: String,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub updated_at: Option<chrono::DateTime<chrono::offset::Utc>>,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -93,7 +93,7 @@ pub struct ChannelSummary {
     pub host: Option<String>,
     pub id: u32,
     pub name: String,
-    pub url: String,
+    pub url: Option<String>,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -186,7 +186,7 @@ pub struct User {
     pub no_welcome_modal: bool,
     pub blocked: bool,
     pub blocked_reason: Option<String>,
-    pub created_at: String,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub account: Account,
     pub video_channels: Vec<Channel>,
 }
@@ -222,8 +222,8 @@ pub struct Import {
     pub torrent_name: Option<String>,
     pub state: State,
     pub error: Option<String>,
-    pub created_at: String,
-    pub updated_at: String,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
     pub video: Video,
 }
 
@@ -252,7 +252,7 @@ pub struct Abuse {
     pub state: AbuseState,
     pub moderation_comment: String,
     pub video: VideoInfo,
-    pub created_at: String,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
 }
 
 #[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
@@ -270,6 +270,7 @@ pub struct VideoInfo {
     pub id: u32,
     pub uuid: String,
     pub name: String,
+    pub channel: Option<ChannelSummary>,
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
@@ -289,7 +290,7 @@ pub enum AbusePredefinedReasons {
 #[serde(rename_all = "camelCase")]
 pub struct Subscription {
     pub avatar: Option<Avatar>,
-    pub created_at: String,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub description: Option<String>,
     pub display_name: String,
     pub followers_count: u32,
@@ -301,6 +302,51 @@ pub struct Subscription {
     pub name: String,
     pub owner_account: Option<Account>,
     pub support: Option<String>,
-    pub updated_at: String,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
     pub url: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Notification {
+    account: Option<AccountSummary>,
+    //pub actor_follow: Option<>,
+    pub comment: Option<Comment>,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub id: u32,
+    pub read: bool,
+    pub r#type: UserNotificationType,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub video: Option<VideoInfo>,
+    //pub video_abuse: Option<>,
+    //pub video_blacklist: Option<>,
+    //pub video_import: Option<>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Comment {
+    pub account: AccountSummary,
+    pub id: u32,
+    pub thread_id: u32,
+    pub video: VideoInfo,
+}
+
+#[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
+#[repr(u8)]
+pub enum UserNotificationType {
+    NewVideoFromSubscription = 1,
+    NewCommentOnMyVideo = 2,
+    NewAbuseForModerators = 3,
+    BlacklistOnMyVideo = 4,
+    UnblacklistOnMyVideo = 5,
+    MyVideoPublished = 6,
+    MyVideoImportSuccess = 7,
+    MyVideoImportError = 8,
+    NewUserRegistration = 9,
+    NewFollow = 10,
+    CommentMention = 11,
+    VideoAutoBlacklistForModerators = 12,
+    NewInstanceFollower = 13,
+    AutoInstanceFollowing = 14,
 }
