@@ -1,5 +1,5 @@
 #[derive(Debug, Default, serde::Serialize)]
-pub struct Accounts {
+pub struct Pagination {
     pub count: Option<usize>,
     pub sort: Option<String>,
     pub start: Option<usize>,
@@ -32,19 +32,17 @@ pub enum VideoFilter {
 #[derive(Debug, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Channels {
-    pub count: Option<usize>,
-    pub sort: Option<String>,
-    pub start: Option<usize>,
+    #[serde(flatten)]
+    pub pagination: Pagination,
     pub with_stats: Option<bool>,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Ratings {
-    pub count: Option<usize>,
+    #[serde(flatten)]
+    pub pagination: Pagination,
     pub rating: Option<Rating>,
-    pub sort: Option<String>,
-    pub start: Option<usize>,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -93,10 +91,9 @@ impl Default for AdminFlag {
 #[derive(Debug, Default, serde::Serialize)]
 pub struct Users {
     pub blocked: Option<bool>,
-    pub count: Option<u32>,
     pub search: Option<String>,
-    pub sort: Option<String>,
-    pub start: Option<u32>,
+    #[serde(flatten)]
+    pub pagination: Pagination,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
@@ -134,4 +131,39 @@ pub struct Register {
 pub struct Channel {
     pub name: String,
     pub display_name: String,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Me {
+    pub auto_play_video: bool,
+    #[serde(rename = "displayNSFW")]
+    pub display_nsfw: DisplayNsfw,
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum DisplayNsfw {
+    True,
+    False,
+    Both,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Abuse {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    id: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    state: Option<crate::data::AbuseState>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Avatar {
+    pub avatarfile: String,
 }

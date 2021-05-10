@@ -52,7 +52,7 @@ pub struct Video {
     pub category: Category,
     pub channel: ChannelSummary,
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub description: String,
+    pub description: Option<String>,
     pub dislikes: u32,
     pub duration: u32,
     pub embed_path: String,
@@ -81,7 +81,7 @@ pub struct Video {
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Category {
-    pub id: u32,
+    pub id: Option<u32>,
     pub label: String,
 }
 
@@ -180,8 +180,8 @@ pub struct User {
     pub auto_play_video: bool,
     pub role: Role,
     pub role_label: String,
-    pub video_quota: i32,
-    pub video_quota_daily: i32,
+    pub video_quota: i64,
+    pub video_quota_daily: i64,
     pub no_instance_config_warning_modal: bool,
     pub no_welcome_modal: bool,
     pub blocked: bool,
@@ -205,4 +205,76 @@ pub enum Role {
     Admin = 0,
     Moderator = 1,
     User = 2,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Import {
+    pub id: u32,
+    pub target_url: String,
+    pub magnet_uri: Option<String>,
+    pub torrent_name: Option<String>,
+    pub state: State,
+    pub error: Option<String>,
+    pub created_at: String,
+    pub updated_at: String,
+    pub video: Video,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Quota {
+    pub video_quota_used: u64,
+    pub video_quota_used_daily: u64,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Rating {
+    pub video_id: u32,
+    pub rating: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Abuse {
+    pub id: u32,
+    pub reason: String,
+    #[serde(default)]
+    pub predefined_reasons: Vec<AbusePredefinedReasons>,
+    pub reporter_account: Account,
+    pub state: AbuseState,
+    pub moderation_comment: String,
+    pub video: VideoInfo,
+    pub created_at: String,
+}
+
+#[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
+#[serde(rename_all = "camelCase")]
+#[repr(u8)]
+pub enum AbuseState {
+    Pending = 1,
+    Rejected = 2,
+    Accepted = 3,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoInfo {
+    pub id: u32,
+    pub uuid: String,
+    pub name: String,
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub enum AbusePredefinedReasons {
+    ViolentOrAbusive,
+    HatefulOrAbusive,
+    SpamOrMisleading,
+    Privacy,
+    Rights,
+    ServerRules,
+    Thumbnails,
+    Captions,
 }

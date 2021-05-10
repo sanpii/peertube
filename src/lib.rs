@@ -21,6 +21,7 @@ pub struct Api {
     config: Config,
     pub accounts: services::Accounts,
     pub users: services::Users,
+    pub me: services::Me,
 }
 
 impl Api {
@@ -32,6 +33,7 @@ impl Api {
         Self {
             accounts: services::Accounts::new(&config),
             users: services::Users::new(&config),
+            me: services::Me::new(&config),
             config,
         }
     }

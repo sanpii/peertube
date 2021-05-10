@@ -29,7 +29,7 @@ impl Accounts {
     /**
      * List accounts.
      */
-    pub async fn all(&self, params: &crate::param::Accounts) -> crate::Result<crate::Pager<crate::data::Account>> {
+    pub async fn all(&self, params: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Account>> {
         crate::Api::get(&self.config, "/accounts", params, None).await
     }
 
@@ -72,7 +72,7 @@ mod test {
     fn accounts() {
         let (api, _) = crate::test::api();
         let accounts = tokio_test::block_on(
-            api.accounts.all(&crate::param::Accounts {
+            api.accounts.all(&crate::param::Pagination {
                 count: Some(2),
                 .. Default::default()
             })
