@@ -15,7 +15,7 @@ pub struct Account {
     pub host: String,
     pub avatar: Option<Avatar>,
     pub id: u32,
-    pub host_redundancy_allowed: bool,
+    pub host_redundancy_allowed: Option<bool>,
     pub following_count: u32,
     pub followers_count: u32,
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
@@ -283,4 +283,24 @@ pub enum AbusePredefinedReasons {
     ServerRules,
     Thumbnails,
     Captions,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Subscription {
+    pub avatar: Option<Avatar>,
+    pub created_at: String,
+    pub description: Option<String>,
+    pub display_name: String,
+    pub followers_count: u32,
+    pub following_count: u32,
+    pub host: String,
+    pub host_redundancy_allowed: Option<bool>,
+    pub id: u32,
+    pub is_local: bool,
+    pub name: String,
+    pub owner_account: Option<Account>,
+    pub support: Option<String>,
+    pub updated_at: String,
+    pub url: String,
 }

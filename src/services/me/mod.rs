@@ -1,11 +1,17 @@
+mod subscriptions;
+
+pub use subscriptions::*;
+
 pub struct Me {
     config: crate::Config,
+    pub subscriptions: Subscriptions,
 }
 
 impl Me {
     pub(crate) fn new(config: &crate::Config) -> Self {
         Self {
             config: config.clone(),
+            subscriptions: Subscriptions::new(config),
         }
     }
 
@@ -28,8 +34,8 @@ impl Me {
     /**
      * Get video imports of my user.
      */
-    pub async fn imports(&self, auth: &crate::data::Token, params: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Import>> {
-        crate::Api::get(&self.config, "/users/me/videos/imports", params, Some(auth)).await
+    pub async fn imports(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Import>> {
+        crate::Api::get(&self.config, "/users/me/videos/imports", pagination, Some(auth)).await
     }
 
     /**
@@ -49,8 +55,8 @@ impl Me {
     /**
      * Get videos of my user.
      */
-    pub async fn videos(&self, auth: &crate::data::Token, params: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Video>> {
-        crate::Api::get(&self.config, "/users/me/videos", params, Some(auth)).await
+    pub async fn videos(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Video>> {
+        crate::Api::get(&self.config, "/users/me/videos", pagination, Some(auth)).await
     }
 
     /**

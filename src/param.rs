@@ -33,6 +33,8 @@ pub struct Videos {
     pub tags_all_of: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags_one_of: Option<String>,
+    #[serde(flatten)]
+    pub pagination: Pagination,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -187,4 +189,10 @@ pub struct Abuse {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct Avatar {
     pub avatarfile: String,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Subscription {
+    pub uri: String,
 }
