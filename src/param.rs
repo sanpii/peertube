@@ -61,7 +61,7 @@ pub struct Ratings {
     pub rating: Option<Rating>,
 }
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Clone, Copy, Debug, serde::Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Rating {
     Like,

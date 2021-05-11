@@ -213,6 +213,26 @@ impl Videos {
             .await?
             .into()
     }
+
+    /**
+     * Like/dislike a video.
+     */
+    pub async fn rate(&self, auth: &crate::data::Token, id: &str, rate: crate::param::Rating) -> crate::Result<()> {
+        let request = crate::Request {
+            path: format!("/videos/{}/rate", id),
+            params: crate::param::Ratings {
+                rating: Some(rate),
+
+                .. Default::default()
+            },
+            auth: Some(auth.clone()),
+            form: None,
+        };
+
+        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
+    }
 }
 
 #[cfg(test)]
@@ -403,6 +423,16 @@ mod test {
 
         let status = tokio_test::block_on(
             api.videos.update_live(&token, "04193a18-7abc-4803-bec7-c75d9888256f", &params)
+        );
+        assert!(status.is_ok());
+    }
+
+    #[test]
+    fn rate() {
+        let (api, token) = crate::test::api();
+
+        let status = tokio_test::block_on(
+            api.videos.rate(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", crate::param::Rating::Like)
         );
         assert!(status.is_ok());
     }
