@@ -366,6 +366,8 @@ pub(crate) struct Description {
 #[serde(rename_all = "camelCase")]
 pub enum NewContent {
     Video(NewVideo),
+    #[serde(rename = "videoChannel")]
+    Channel(NewChannel),
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -373,6 +375,12 @@ pub enum NewContent {
 pub struct NewVideo {
     pub id: u32,
     pub uuid: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewChannel {
+    pub id: u32,
 }
 
 #[derive(Debug, serde::Deserialize)]

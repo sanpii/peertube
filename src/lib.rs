@@ -42,6 +42,7 @@ impl<S: serde::Serialize> Request<S> {
                     serde_json::Value::Object(map) => for (k, v) in map.iter() {
                         form = form.text(k.to_string(), v.to_string());
                     }
+                    serde_json::Value::Null => (),
                     _ => unimplemented!(),
                 };
 
@@ -86,6 +87,7 @@ impl From<String> for Request<()> {
 pub struct Api {
     config: Config,
     pub accounts: services::Accounts,
+    pub channels: services::Channels,
     pub me: services::Me,
     pub users: services::Users,
     pub videos: services::Videos,
@@ -99,6 +101,7 @@ impl Api {
 
         Self {
             accounts: services::Accounts::new(&config),
+            channels: services::Channels::new(&config),
             me: services::Me::new(&config),
             users: services::Users::new(&config),
             videos: services::Videos::new(&config),

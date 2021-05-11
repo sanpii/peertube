@@ -147,11 +147,15 @@ pub struct Register {
     pub display_name: Option<String>,
 }
 
-#[derive(Debug, serde::Serialize)]
+#[derive(Debug, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Channel {
     pub name: String,
     pub display_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support: Option<String>,
 }
 
 #[derive(Debug, serde::Serialize)]
@@ -364,4 +368,17 @@ pub struct LiveSetting {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct Caption {
     pub captionfile: String,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ChannelSetting {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_videos_support_update: Option<bool>,
 }

@@ -209,20 +209,6 @@ impl Videos {
             .await?
             .into()
     }
-
-    /**
-     * List videos of a video channel.
-     */
-    pub async fn channel(&self, id: &str, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
-        let request = crate::Request {
-            path: format!("/video-channels/{}/videos", id),
-            params,
-            auth: None,
-            form: None,
-        };
-
-        crate::Api::get(&self.config, request).await
-    }
 }
 
 #[cfg(test)]
@@ -415,15 +401,5 @@ mod test {
             api.videos.update_live(&token, "04193a18-7abc-4803-bec7-c75d9888256f", &params)
         );
         assert!(status.is_ok());
-    }
-
-    #[test]
-    fn channel() {
-        let (api, _) = crate::test::api();
-
-        let channel = tokio_test::block_on(
-            api.videos.channel("58edd166-dab0-4a1e-86e3-85778b78ba77", &crate::param::Videos::default())
-        );
-        assert!(channel.is_ok());
     }
 }
