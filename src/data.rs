@@ -7,6 +7,12 @@ impl<'de> serde::Deserialize<'de> for Empty {
     }
 }
 
+impl From<Empty> for crate::Result<()> {
+    fn from(_: Empty) -> Self {
+        Ok(())
+    }
+}
+
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Account {

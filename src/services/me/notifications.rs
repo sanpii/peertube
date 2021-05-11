@@ -36,9 +36,9 @@ impl Notifications {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::post::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 
     /**
@@ -52,9 +52,9 @@ impl Notifications {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::post::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 
     /**
@@ -68,9 +68,9 @@ impl Notifications {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 }
 

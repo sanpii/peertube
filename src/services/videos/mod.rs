@@ -68,9 +68,9 @@ impl Videos {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 
     /**
@@ -91,9 +91,9 @@ impl Videos {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::delete(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 
     /**
@@ -109,9 +109,9 @@ impl Videos {
      * Add a view to a video.
      */
     pub async fn add_view(&self, id: &str) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::post(&self.config, format!("/videos/{}/views", id).into()).await?;
-
-        Ok(())
+        crate::Api::post::<crate::data::Empty, _>(&self.config, format!("/videos/{}/views", id).into())
+            .await?
+            .into()
     }
 
     /**
@@ -127,9 +127,9 @@ impl Videos {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 
     /**
@@ -205,9 +205,9 @@ impl Videos {
             form: None,
         };
 
-        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
-
-        Ok(())
+        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
     }
 
     /**
