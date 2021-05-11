@@ -27,14 +27,26 @@ impl Me {
      * Get my user information.
      */
     pub async fn info(&self, auth: &crate::data::Token) -> crate::Result<crate::data::User> {
-        crate::Api::get(&self.config, "/users/me", (), Some(auth)).await
+        let request = crate::Request {
+            path: "/users/me".into(),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Update my user information.
      */
     pub async fn update(&self, auth: &crate::data::Token, params: &crate::param::Me) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::put(&self.config, "/users/me", params, Some(auth)).await?;
+        let request = crate::Request {
+            path: "/users/me".into(),
+            params,
+            auth: Some(auth.clone()),
+        };
+
+        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
 
         Ok(())
     }
@@ -43,45 +55,80 @@ impl Me {
      * Get video imports of my user.
      */
     pub async fn imports(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Import>> {
-        crate::Api::get(&self.config, "/users/me/videos/imports", pagination, Some(auth)).await
+        let request = crate::Request {
+            path: "/users/me/videos/imports".into(),
+            params: pagination,
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Get my user used quota.
      */
     pub async fn quota(&self, auth: &crate::data::Token) -> crate::Result<crate::data::Quota> {
-        crate::Api::get(&self.config, "/users/me/video-quota-used", (), Some(auth)).await
+        let request = crate::Request {
+            path: "/users/me/video-quota-used".into(),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Get rate of my user for a video.
      */
     pub async fn video_rating(&self, auth: &crate::data::Token, id: &str) -> crate::Result<crate::data::Rating> {
-        crate::Api::get(&self.config, &format!("/users/me/videos/{}/rating", id), (), Some(auth)).await
+        let request = crate::Request {
+            path: format!("/users/me/videos/{}/rating", id),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Get videos of my user.
      */
     pub async fn videos(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Video>> {
-        crate::Api::get(&self.config, "/users/me/videos", pagination, Some(auth)).await
+        let request = crate::Request {
+            path: "/users/me/videos".into(),
+            params: pagination,
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Update my user avatar.
      */
     pub async fn update_avatar(&self, auth: &crate::data::Token, avatarfile: &str) -> crate::Result<crate::data::Avatar> {
-        let avatar = crate::param::Avatar {
-            avatarfile: avatarfile.to_string(),
+        let request = crate::Request {
+            path: "/users/me/avatar/pick".into(),
+            params: crate::param::Avatar {
+                avatarfile: avatarfile.to_string(),
+            },
+            auth: Some(auth.clone()),
         };
-        crate::Api::post(&self.config, "/users/me/avatar/pick", avatar, Some(auth)).await
+
+        crate::Api::post(&self.config, request).await
     }
 
     /**
      * Delete my avatar.
      */
     pub async fn delete_avatar(&self, auth: &crate::data::Token) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::post(&self.config, "/users/me/avatar", (), Some(auth)).await?;
+        let request = crate::Request {
+            path: "/users/me/avatar".into(),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
 
         Ok(())
     }
@@ -90,7 +137,13 @@ impl Me {
      * List my abuses.
      */
     pub async fn abuses(&self, auth: &crate::data::Token, params: &crate::param::Abuse) -> crate::Result<crate::Pager<crate::data::Abuse>> {
-        crate::Api::get(&self.config, "/users/me/abuses", params, Some(auth)).await
+        let request = crate::Request {
+            path: "/users/me/abuses".into(),
+            params,
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 }
 

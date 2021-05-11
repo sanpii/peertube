@@ -13,17 +13,28 @@ impl Notifications {
      * List my notifications.
      */
     pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Notification) -> crate::Result<crate::Pager<crate::data::Notification>> {
-        crate::Api::get(&self.config, "/users/me/notifications", params, Some(auth)).await
+        let request = crate::Request {
+            path: "/users/me/notifications".into(),
+            params,
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Mark notifications as read by their id.
      */
     pub async fn read(&self, auth: &crate::data::Token, ids: &[u32]) -> crate::Result<()> {
-        let param = crate::param::Notifications {
-            ids: ids.to_vec(),
+        let request = crate::Request {
+            path: "/users/me/notifications/read".into(),
+            params: crate::param::Notifications {
+                ids: ids.to_vec(),
+            },
+            auth: Some(auth.clone()),
         };
-        let _: crate::data::Empty = crate::Api::post(&self.config, "/users/me/notifications/read", param, Some(auth)).await?;
+
+        let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
 
         Ok(())
     }
@@ -32,7 +43,13 @@ impl Notifications {
      * Mark all my notification as read.
      */
     pub async fn read_all(&self, auth: &crate::data::Token) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::post(&self.config, "/users/me/notifications/read-all", (), Some(auth)).await?;
+        let request = crate::Request {
+            path: "/users/me/notifications/read-all".into(),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
 
         Ok(())
     }
@@ -41,7 +58,13 @@ impl Notifications {
      * Update my notification settings.
      */
     pub async fn settings(&self, auth: &crate::data::Token, settings: &crate::param::NotificationSettings) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::put(&self.config, "/users/me/notification-settings", settings, Some(auth)).await?;
+        let request = crate::Request {
+            path: "/users/me/notification-settings".into(),
+            params: settings,
+            auth: Some(auth.clone()),
+        };
+
+        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
 
         Ok(())
     }

@@ -19,6 +19,28 @@ struct Config {
     base_url: String,
 }
 
+struct Request<S: serde::Serialize> {
+    path: String,
+    params: S,
+    auth: Option<data::Token>,
+}
+
+impl From<&str> for Request<()> {
+    fn from(path: &str) -> Self {
+        path.to_string().into()
+    }
+}
+
+impl From<String> for Request<()> {
+    fn from(path: String) -> Self {
+        Self {
+            path,
+            params: (),
+            auth: None,
+        }
+    }
+}
+
 pub struct Api {
     config: Config,
     pub accounts: services::Accounts,
@@ -41,7 +63,7 @@ impl Api {
     }
 
     pub async fn auth(&self, username: &str, password: &str) -> crate::Result<data::Token> {
-        let oauth_clients: data::OauthClient = Self::get(&self.config, "/oauth-clients/local", (), None).await?;
+        let oauth_clients: data::OauthClient = Self::get(&self.config, "/oauth-clients/local".into()).await?;
         let params = param::Auth {
             client_id: oauth_clients.client_id,
             client_secret: oauth_clients.client_secret,
@@ -51,34 +73,41 @@ impl Api {
             response_type: "code".to_string(),
         };
 
-        Self::post(&self.config, "/users/token", &params, None).await
+        let request = Request {
+            path: "/users/token".to_string(),
+            params,
+            auth: None,
+        };
+        Self::post(&self.config, request).await
     }
 
-    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
-        Self::request(reqwest::Method::GET, config, path, params, auth).await
+    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+        Self::request(reqwest::Method::GET, config, request).await
     }
 
-    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
-        Self::request(reqwest::Method::POST, config, path, params, auth).await
+    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+        Self::request(reqwest::Method::POST, config, request).await
     }
 
-    pub(crate) async fn delete<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
-        Self::request(reqwest::Method::DELETE, config, path, params, auth).await
+    pub(crate) async fn delete<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+        Self::request(reqwest::Method::DELETE, config, request).await
     }
 
-    pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
-        Self::request(reqwest::Method::PUT, config, path, params, auth).await
+    pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+        Self::request(reqwest::Method::PUT, config, request).await
     }
 
-    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, path: &str, params: P, auth: Option<&data::Token>) -> crate::Result<T> {
+    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, param: Request<P>) -> crate::Result<T> {
+        let Request { path, params, auth } = param;
         let url = format!("{}/api/v1{}", config.base_url, path);
         let client = reqwest::Client::new();
         let mut request = client.request(method.clone(), &url);
 
-        request = match (method, path) {
+        request = match (method, path.as_str()) {
             (reqwest::Method::GET, _) => request.query(&params),
             (reqwest::Method::DELETE, _) => request.form(&params),
             (reqwest::Method::POST, "/users/token") => request.form(&params),
+            (reqwest::Method::POST, "/videos/upload") => request.form(&params),
             _ => {
                 let body = serde_json::to_string(&params)?;
 

@@ -141,7 +141,7 @@ pub(crate) struct OauthClient {
     pub client_secret: String,
 }
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Deserialize)]
 pub struct Token {
     pub access_token: String,
     pub token_type: String,

@@ -13,7 +13,13 @@ impl Users {
      * Create a user.
      */
     pub async fn create(&self, auth: &crate::data::Token, user: &crate::param::NewUser) -> crate::Result<crate::data::NewUser> {
-        let data = crate::Api::post(&self.config, "/users", user, Some(auth)).await?;
+        let request = crate::Request {
+            path: "/users".to_string(),
+            params: user.clone(),
+            auth: Some(auth.clone()),
+        };
+
+        let data = crate::Api::post(&self.config, request).await?;
 
         let crate::data::Data::NewUser(user) = data;
 
@@ -24,14 +30,26 @@ impl Users {
      * List users.
      */
     pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Users) -> crate::Result<crate::Pager<crate::data::User>> {
-        crate::Api::get(&self.config, "/users", params, Some(auth)).await
+        let request = crate::Request {
+            path: "/users".to_string(),
+            params,
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Delete a user.
      */
     pub async fn delete(&self, auth: &crate::data::Token, id: u32) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::delete(&self.config, &format!("/users/{}", id), (), Some(auth)).await?;
+        let request = crate::Request {
+            path: format!("/users/{}", id),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        let _: crate::data::Empty = crate::Api::delete(&self.config, request).await?;
 
         Ok(())
     }
@@ -40,14 +58,26 @@ impl Users {
      * Get a user.
      */
     pub async fn get(&self, auth: &crate::data::Token, id: u32) -> crate::Result<crate::data::User> {
-        crate::Api::get(&self.config, &format!("/users/{}", id), (), Some(auth)).await
+        let request = crate::Request {
+            path: format!("/users/{}", id),
+            params: (),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * Update a user.
      */
     pub async fn update(&self, auth: &crate::data::Token, id: u32, params: &crate::param::User) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::put(&self.config, &format!("/users/{}", id), params, Some(auth)).await?;
+        let request = crate::Request {
+            path: format!("/users/{}", id),
+            params,
+            auth: Some(auth.clone()),
+        };
+
+        let _: crate::data::Empty = crate::Api::put(&self.config, request).await?;
 
         Ok(())
     }
@@ -56,7 +86,13 @@ impl Users {
      * Register a user.
      */
     pub async fn register(&self, params: &crate::param::Register) -> crate::Result<()> {
-        let _: crate::data::Empty = crate::Api::post(&self.config, "/users/register", params, None).await?;
+        let request = crate::Request {
+            path: "/users/register".to_string(),
+            params,
+            auth: None,
+        };
+
+        let _: crate::data::Empty = crate::Api::post(&self.config, request).await?;
 
         Ok(())
     }

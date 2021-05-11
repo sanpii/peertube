@@ -16,35 +16,59 @@ impl Accounts {
      * Get an account.
      */
     pub async fn get(&self, name: &str) -> crate::Result<crate::data::Account> {
-        crate::Api::get(&self.config, &format!("/accounts/{}", name), (), None).await
+        crate::Api::get(&self.config, format!("/accounts/{}", name).into()).await
     }
 
     /**
      * List videos of an account.
      */
     pub async fn videos(&self, name: &str, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
-        crate::Api::get(&self.config, &format!("/accounts/{}/videos", name), params, None).await
+        let request = crate::Request {
+            path: format!("/accounts/{}/videos", name),
+            params,
+            auth: None,
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * List accounts.
      */
-    pub async fn all(&self, params: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Account>> {
-        crate::Api::get(&self.config, "/accounts", params, None).await
+    pub async fn all(&self, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Account>> {
+        let request = crate::Request {
+            path: "/accounts".to_string(),
+            params: pagination,
+            auth: None,
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * List video channels of an account.
      */
     pub async fn video_channels(&self, name: &str, params: &crate::param::Channels) -> crate::Result<crate::Pager<crate::data::Channel>> {
-        crate::Api::get(&self.config, &format!("/accounts/{}/video-channels", name), params, None).await
+        let request = crate::Request {
+            path: format!("/accounts/{}/video-channels", name),
+            params,
+            auth: None,
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 
     /**
      * List ratings of an account.
      */
     pub async fn ratings(&self, auth: &crate::data::Token, name: &str, params: &crate::param::Ratings) -> crate::Result<crate::Pager<crate::data::Channel>> {
-        crate::Api::get(&self.config, &format!("/accounts/{}/ratings", name), params, Some(auth)).await
+        let request = crate::Request {
+            path: format!("/accounts/{}/ratings", name),
+            params,
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::get(&self.config, request).await
     }
 }
 
