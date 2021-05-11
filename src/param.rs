@@ -382,3 +382,9 @@ pub struct ChannelSetting {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bulk_videos_support_update: Option<bool>,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Comment {
+    pub text: String,
+}

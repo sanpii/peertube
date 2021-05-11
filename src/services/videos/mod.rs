@@ -1,10 +1,13 @@
 mod captions;
+mod comments;
 
 use captions::*;
+use comments::*;
 
 pub struct Videos {
     config: crate::Config,
     pub captions: Captions,
+    pub comments: Comments,
 }
 
 impl Videos {
@@ -12,6 +15,7 @@ impl Videos {
         Self {
             config: config.clone(),
             captions: Captions::new(config),
+            comments: Comments::new(config),
         }
     }
 

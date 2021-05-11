@@ -317,7 +317,7 @@ pub struct Subscription {
 pub struct Notification {
     account: Option<AccountSummary>,
     //pub actor_follow: Option<>,
-    pub comment: Option<Comment>,
+    pub comment: Option<CommentSummary>,
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub id: u32,
     pub read: bool,
@@ -331,7 +331,7 @@ pub struct Notification {
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Comment {
+pub struct CommentSummary {
     pub account: AccountSummary,
     pub id: u32,
     pub thread_id: u32,
@@ -368,6 +368,7 @@ pub enum NewContent {
     Video(NewVideo),
     #[serde(rename = "videoChannel")]
     Channel(NewChannel),
+    Comment(Comment),
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -397,4 +398,29 @@ pub struct Live {
 pub struct Caption {
     pub caption_path: String,
     pub language: Language,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Thread {
+    pub comment: Comment,
+    pub children: Vec<Comment>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Comment {
+    pub account: Option<Account>,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub id: u32,
+    pub in_reply_to_comment_id: Option<u32>,
+    pub text: String,
+    pub thread_id: u32,
+    pub total_replies: u32,
+    pub total_replies_from_video_author: u32,
+    pub is_deleted: bool,
+    pub deleted_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub url: String,
+    pub video_id: u32,
 }
