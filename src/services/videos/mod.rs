@@ -1,11 +1,17 @@
+mod captions;
+
+use captions::*;
+
 pub struct Videos {
     config: crate::Config,
+    pub captions: Captions,
 }
 
 impl Videos {
     pub(crate) fn new(config: &crate::Config) -> Self {
         Self {
             config: config.clone(),
+            captions: Captions::new(config),
         }
     }
 
@@ -342,7 +348,7 @@ mod test {
         };
 
         let video = tokio_test::block_on(
-            api.videos.upload(&token, "video.mp4", &params)
+            api.videos.upload(&token, "fixtures/video.mp4", &params)
         );
         assert!(video.is_ok());
     }

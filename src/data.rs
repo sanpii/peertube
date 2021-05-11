@@ -377,3 +377,10 @@ pub struct Live {
     pub save_replay: bool,
     pub permanent_live: bool,
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Caption {
+    pub caption_path: String,
+    pub language: Language,
+}

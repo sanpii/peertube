@@ -359,3 +359,9 @@ pub struct LiveSetting {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permanent_live: Option<bool>,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Caption {
+    pub captionfile: String,
+}
