@@ -369,6 +369,10 @@ pub enum NewContent {
     #[serde(rename = "videoChannel")]
     Channel(NewChannel),
     Comment(Comment),
+    #[serde(rename = "videoPlaylist")]
+    Playlist(NewPlaylist),
+    #[serde(rename = "videoPlaylistElement")]
+    PlaylistElement(NewPlaylistElement),
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -381,6 +385,19 @@ pub struct NewVideo {
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NewChannel {
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewPlaylist {
+    pub id: u32,
+    pub uuid: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewPlaylistElement {
     pub id: u32,
 }
 
@@ -423,4 +440,36 @@ pub struct Comment {
     pub updated_at: chrono::DateTime<chrono::offset::Utc>,
     pub url: String,
     pub video_id: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Playlist {
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub description: Option<String>,
+    pub display_name: String,
+    pub id: u32,
+    pub is_local: bool,
+    pub owner_account: AccountSummary,
+    pub privacy: Privacy,
+    pub thumbnail_path: Option<String>,
+    pub r#type: PlaylistType,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub uuid: String,
+    pub video_channel: Option<ChannelSummary>,
+    pub videos_length: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistType {
+    pub id: PlaylistId,
+    pub label: String,
+}
+
+#[derive(Debug, serde_repr::Deserialize_repr)]
+#[repr(u8)]
+pub enum PlaylistId {
+    Regular = 1,
+    WatchLater = 2,
 }

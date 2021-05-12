@@ -388,3 +388,56 @@ pub struct ChannelSetting {
 pub(crate) struct Comment {
     pub text: String,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Playlist {
+    pub display_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<Privacy>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thumbnailfile: Option<Vec<u8>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_channel_id: Option<u32>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistSetting {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy: Option<Privacy>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thumbnailfile: Option<Vec<u8>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_channel_id: Option<u32>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PlaylistElement {
+    pub video_id: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_timestmap: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_timestmap: Option<u64>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Reorder {
+    pub insert_after_position: u32,
+    pub start_position: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reorder_length: Option<u32>,
+}
+
+#[derive(Debug, serde::Serialize)]
+pub(crate) struct Elements {
+    pub video_ids: Vec<String>,
+}

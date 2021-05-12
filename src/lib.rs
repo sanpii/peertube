@@ -110,6 +110,7 @@ pub struct Api {
     pub accounts: services::Accounts,
     pub channels: services::Channels,
     pub me: services::Me,
+    pub playlists: services::Playlists,
     pub users: services::Users,
     pub videos: services::Videos,
 }
@@ -124,6 +125,7 @@ impl Api {
             accounts: services::Accounts::new(&config),
             channels: services::Channels::new(&config),
             me: services::Me::new(&config),
+            playlists: services::Playlists::new(&config),
             users: services::Users::new(&config),
             videos: services::Videos::new(&config),
             config,
