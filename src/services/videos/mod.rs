@@ -1,13 +1,16 @@
 mod captions;
 mod comments;
+mod ownership;
 
 use captions::*;
 use comments::*;
+use ownership::*;
 
 pub struct Videos {
     config: crate::Config,
     pub captions: Captions,
     pub comments: Comments,
+    pub ownership: Ownership,
 }
 
 impl Videos {
@@ -16,6 +19,7 @@ impl Videos {
             config: config.clone(),
             captions: Captions::new(config),
             comments: Comments::new(config),
+            ownership: Ownership::new(config),
         }
     }
 

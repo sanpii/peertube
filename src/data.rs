@@ -473,3 +473,8 @@ pub enum PlaylistId {
     Regular = 1,
     WatchLater = 2,
 }
+
+#[derive(Debug, serde::Deserialize)]
+pub struct Ownership {
+    pub id: String,
+}

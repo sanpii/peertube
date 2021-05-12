@@ -441,3 +441,8 @@ pub struct Reorder {
 pub(crate) struct Elements {
     pub video_ids: Vec<String>,
 }
+
+#[derive(Debug, serde::Serialize)]
+pub(crate) struct Ownership {
+    pub username: String,
+}
