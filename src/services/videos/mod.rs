@@ -1,15 +1,18 @@
 mod captions;
 mod comments;
+mod live;
 mod ownership;
 
 use captions::*;
 use comments::*;
+use live::*;
 use ownership::*;
 
 pub struct Videos {
     config: crate::Config,
     pub captions: Captions,
     pub comments: Comments,
+    pub live: Live,
     pub ownership: Ownership,
 }
 
@@ -19,6 +22,7 @@ impl Videos {
             config: config.clone(),
             captions: Captions::new(config),
             comments: Comments::new(config),
+            live: Live::new(config),
             ownership: Ownership::new(config),
         }
     }
@@ -162,47 +166,6 @@ impl Videos {
         };
 
         crate::Api::post(&self.config, request).await
-    }
-
-    /**
-     * Create a live.
-     */
-    pub async fn new_live(&self, auth: &crate::data::Token, params: &crate::param::Live) -> crate::Result<crate::data::NewContent> {
-        let request = crate::Request {
-            path: "/videos/live".to_string(),
-            params: crate::Params::Json(params),
-            auth: Some(auth.clone()),
-        };
-
-        crate::Api::post(&self.config, request).await
-    }
-
-    /**
-     * Get information about a live.
-     */
-    pub async fn live(&self, auth: &crate::data::Token, id: &str) -> crate::Result<crate::data::Live> {
-        let request = crate::Request {
-            path: format!("/videos/live/{}", id),
-            params: crate::Params::none(),
-            auth: Some(auth.clone()),
-        };
-
-        crate::Api::get(&self.config, request).await
-    }
-
-    /**
-     * Update information about a live.
-     */
-    pub async fn update_live(&self, auth: &crate::data::Token, id: &str, params: &crate::param::LiveSetting) -> crate::Result<()> {
-        let request = crate::Request {
-            path: format!("/videos/live/{}", id),
-            params: crate::Params::Json(params),
-            auth: Some(auth.clone()),
-        };
-
-        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
-            .await?
-            .into()
     }
 
     /**
@@ -374,49 +337,6 @@ mod test {
             api.videos.import(&token, &params)
         );
         assert!(video.is_ok());
-    }
-
-    #[test]
-    fn new_live() {
-        let (api, token) = crate::test::api();
-        let params = crate::param::Live {
-            video: crate::param::NewVideo {
-                channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
-                name: "test".to_string(),
-
-                .. Default::default()
-            },
-
-            .. Default::default()
-        };
-
-        let video = tokio_test::block_on(
-            api.videos.new_live(&token, &params)
-        );
-        assert!(video.is_ok());
-    }
-
-    #[test]
-    fn live() {
-        let (api, token) = crate::test::api();
-        let live = tokio_test::block_on(
-            api.videos.live(&token, "04193a18-7abc-4803-bec7-c75d9888256f")
-        );
-        assert!(live.is_ok());
-    }
-
-    #[test]
-    fn update_live() {
-        let (api, token) = crate::test::api();
-        let params = crate::param::LiveSetting {
-            save_replay: Some(true),
-            permanent_live: Some(false),
-        };
-
-        let status = tokio_test::block_on(
-            api.videos.update_live(&token, "04193a18-7abc-4803-bec7-c75d9888256f", &params)
-        );
-        assert!(status.is_ok());
     }
 
     #[test]
