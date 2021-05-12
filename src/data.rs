@@ -85,7 +85,6 @@ pub struct Video {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Category {
     pub id: Option<u32>,
     pub label: String,
@@ -103,21 +102,18 @@ pub struct ChannelSummary {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Language {
     pub id: Option<String>,
     pub label: String,
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct License {
     pub id: u32,
     pub label: String,
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Privacy {
     pub id: u32,
     pub label: String,
@@ -130,7 +126,6 @@ pub struct ScheduledUpdate {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct State {
     pub id: u32,
     pub label: String,
@@ -262,7 +257,6 @@ pub struct Abuse {
 }
 
 #[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
-#[serde(rename_all = "camelCase")]
 #[repr(u8)]
 pub enum AbuseState {
     Pending = 1,
@@ -271,7 +265,6 @@ pub enum AbuseState {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct VideoInfo {
     pub id: u32,
     pub uuid: String,
@@ -376,27 +369,23 @@ pub enum NewContent {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct NewVideo {
     pub id: u32,
     pub uuid: String,
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct NewChannel {
     pub id: u32,
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct NewPlaylist {
     pub id: u32,
     pub uuid: String,
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct NewPlaylistElement {
     pub id: u32,
 }
@@ -418,7 +407,6 @@ pub struct Caption {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Thread {
     pub comment: Comment,
     pub children: Vec<Comment>,
@@ -461,7 +449,6 @@ pub struct Playlist {
 }
 
 #[derive(Debug, serde::Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct PlaylistType {
     pub id: PlaylistId,
     pub label: String,
@@ -477,4 +464,41 @@ pub enum PlaylistId {
 #[derive(Debug, serde::Deserialize)]
 pub struct Ownership {
     pub id: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct Redundancy {
+    pub id: u32,
+    pub name: String,
+    pub url: String,
+    pub uuid: String,
+    pub redundancies: Redundancies,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Redundancies {
+    pub files: Vec<FileRedundancyInformation>,
+    pub streaming_playlists: Vec<FileRedundancyInformation>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FileRedundancyInformation {
+    pub id: u32,
+    pub file_url: String,
+    pub strategy: Strategy,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub expires_on: chrono::DateTime<chrono::offset::Utc>,
+    pub size: u64,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum Strategy {
+    Manual,
+    MostViews,
+    Trending,
+    RecentlyAdded,
 }

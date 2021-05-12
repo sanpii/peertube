@@ -446,3 +446,24 @@ pub(crate) struct Elements {
 pub(crate) struct Ownership {
     pub username: String,
 }
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Redundancies {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    pub target: MirrorDirection,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum MirrorDirection {
+    MyVideos,
+    RemoteVideos,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Redundancy {
+    pub video_id: String,
+}
