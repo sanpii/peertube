@@ -22,9 +22,8 @@ impl Channels {
     pub async fn create(&self, auth: &crate::data::Token, params: &crate::param::Channel) -> crate::Result<crate::data::NewContent> {
         let request = crate::Request {
             path: "/video-channels".to_string(),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post(&self.config, request).await
@@ -43,9 +42,8 @@ impl Channels {
     pub async fn update(&self, auth: &crate::data::Token, handle: &str, params: &crate::param::ChannelSetting) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/video-channels/{}", handle),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)
@@ -59,9 +57,8 @@ impl Channels {
     pub async fn delete(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/video-channels/{}", handle),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
@@ -75,9 +72,8 @@ impl Channels {
     pub async fn videos(&self, handle: &str, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: format!("/video-channels/{}/videos", handle),
-            params,
+            params: crate::Params::Query(params),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -87,17 +83,10 @@ impl Channels {
      * Update channel avatar.
      */
     pub async fn update_avatar(&self, auth: &crate::data::Token, handle: &str, avatarfile: &str) -> crate::Result<()> {
-        let part = reqwest::multipart::Part::bytes(std::fs::read(avatarfile)?)
-            .file_name(avatarfile.to_string());
-
-        let form = reqwest::multipart::Form::new()
-            .part("avatarfile", part);
-
         let request = crate::Request {
             path: format!("/video-channels/{}/avatar/pick", handle),
-            params: (),
+            params: crate::Params::upload((), "avatarfile", avatarfile)?,
             auth: Some(auth.clone()),
-            form: Some(form),
         };
 
         crate::Api::post::<crate::data::Empty, _>(&self.config, request)
@@ -111,9 +100,8 @@ impl Channels {
     pub async fn delete_avatar(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/video-channels/{}/avatar", handle),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::delete::<crate::data::Empty, _>(&self.config, request)

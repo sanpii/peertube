@@ -20,17 +20,10 @@ impl Captions {
      * Add or replace a video caption.
      */
     pub async fn add(&self, auth: &crate::data::Token, video_id: &str, language: &str, captionfile: &str) -> crate::Result<()> {
-        let part = reqwest::multipart::Part::bytes(std::fs::read(captionfile)?)
-            .file_name(captionfile.to_string());
-
-        let form = reqwest::multipart::Form::new()
-            .part("captionfile", part);
-
         let request = crate::Request {
             path: format!("/videos/{}/captions/{}", video_id, language),
-            params: (),
+            params: crate::Params::upload((), "captionfile", captionfile)?,
             auth: Some(auth.clone()),
-            form: Some(form),
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)
@@ -44,9 +37,8 @@ impl Captions {
     pub async fn delete(&self, auth: &crate::data::Token, video_id: &str, language: &str) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/videos/{}/captions/{}", video_id, language),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::delete::<crate::data::Empty, _>(&self.config, request)

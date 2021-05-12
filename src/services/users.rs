@@ -15,9 +15,8 @@ impl Users {
     pub async fn create(&self, auth: &crate::data::Token, user: &crate::param::NewUser) -> crate::Result<crate::data::NewUser> {
         let request = crate::Request {
             path: "/users".to_string(),
-            params: user.clone(),
+            params: crate::Params::Json(user),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         let data = crate::Api::post(&self.config, request).await?;
@@ -33,9 +32,8 @@ impl Users {
     pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Users) -> crate::Result<crate::Pager<crate::data::User>> {
         let request = crate::Request {
             path: "/users".to_string(),
-            params,
+            params: crate::Params::Query(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -47,9 +45,8 @@ impl Users {
     pub async fn delete(&self, auth: &crate::data::Token, id: u32) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/users/{}", id),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
@@ -63,9 +60,8 @@ impl Users {
     pub async fn get(&self, auth: &crate::data::Token, id: u32) -> crate::Result<crate::data::User> {
         let request = crate::Request {
             path: format!("/users/{}", id),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -77,9 +73,8 @@ impl Users {
     pub async fn update(&self, auth: &crate::data::Token, id: u32, params: &crate::param::User) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/users/{}", id),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)
@@ -93,9 +88,8 @@ impl Users {
     pub async fn register(&self, params: &crate::param::Register) -> crate::Result<()> {
         let request = crate::Request {
             path: "/users/register".to_string(),
-            params,
+            params: crate::Params::Json(params),
             auth: None,
-            form: None,
         };
 
         crate::Api::post::<crate::data::Empty, _>(&self.config, request)

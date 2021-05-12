@@ -25,9 +25,8 @@ impl Videos {
     pub async fn all(&self, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: "/videos".to_string(),
-            params,
+            params: crate::Params::Query(params),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -67,9 +66,8 @@ impl Videos {
     pub async fn update(&self, auth: &crate::data::Token, id: &str, params: &crate::param::Video) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/videos/{}", id),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)
@@ -90,9 +88,8 @@ impl Videos {
     pub async fn delete(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/videos/{}", id),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
@@ -122,13 +119,14 @@ impl Videos {
      * Set watching progress of a video.
      */
     pub async fn set_watching(&self, auth: &crate::data::Token, id: &str, current_time: u32) -> crate::Result<()> {
+        let params = crate::param::Watching {
+            current_time,
+        };
+
         let request = crate::Request {
             path: format!("/videos/{}/watching", id),
-            params: crate::param::Watching {
-                current_time,
-            },
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)
@@ -140,17 +138,10 @@ impl Videos {
      * Upload a video.
      */
     pub async fn upload(&self, auth: &crate::data::Token, videofile: &str, params: &crate::param::NewVideo) -> crate::Result<crate::data::NewContent> {
-        let part = reqwest::multipart::Part::bytes(std::fs::read(videofile)?)
-            .file_name(videofile.to_string());
-
-        let form = reqwest::multipart::Form::new()
-            .part("videofile", part);
-
         let request = crate::Request {
             path: "/videos/upload".to_string(),
-            params,
+            params: crate::Params::upload(params, "videofile", videofile)?,
             auth: Some(auth.clone()),
-            form: Some(form),
         };
 
         crate::Api::post(&self.config, request).await
@@ -162,9 +153,8 @@ impl Videos {
     pub async fn import(&self, auth: &crate::data::Token, params: &crate::param::Import) -> crate::Result<crate::data::NewContent> {
         let request = crate::Request {
             path: "/videos/imports".to_string(),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post(&self.config, request).await
@@ -176,9 +166,8 @@ impl Videos {
     pub async fn new_live(&self, auth: &crate::data::Token, params: &crate::param::Live) -> crate::Result<crate::data::NewContent> {
         let request = crate::Request {
             path: "/videos/live".to_string(),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post(&self.config, request).await
@@ -190,9 +179,8 @@ impl Videos {
     pub async fn live(&self, auth: &crate::data::Token, id: &str) -> crate::Result<crate::data::Live> {
         let request = crate::Request {
             path: format!("/videos/live/{}", id),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -204,9 +192,8 @@ impl Videos {
     pub async fn update_live(&self, auth: &crate::data::Token, id: &str, params: &crate::param::LiveSetting) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/videos/live/{}", id),
-            params,
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)
@@ -218,15 +205,16 @@ impl Videos {
      * Like/dislike a video.
      */
     pub async fn rate(&self, auth: &crate::data::Token, id: &str, rate: crate::param::Rating) -> crate::Result<()> {
+        let params = crate::param::Ratings {
+            rating: Some(rate),
+
+            .. Default::default()
+        };
+
         let request = crate::Request {
             path: format!("/videos/{}/rate", id),
-            params: crate::param::Ratings {
-                rating: Some(rate),
-
-                .. Default::default()
-            },
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)

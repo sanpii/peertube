@@ -15,9 +15,8 @@ impl Subscriptions {
     pub async fn all(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Subscription>> {
         let request = crate::Request {
             path: "/users/me/subscriptions".into(),
-            params: pagination,
+            params: crate::Params::Query(pagination),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -27,13 +26,14 @@ impl Subscriptions {
      * Add subscription to my user.
      */
     pub async fn add(&self, auth: &crate::data::Token, uri: &str) -> crate::Result<()> {
+        let params = crate::param::Subscription {
+            uri: uri.to_string(),
+        };
+
         let request = crate::Request {
             path: "/users/me/subscriptions".into(),
-            params: crate::param::Subscription {
-                uri: uri.to_string(),
-            },
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post::<crate::data::Empty, _>(&self.config, request)
@@ -49,9 +49,8 @@ impl Subscriptions {
 
         let request = crate::Request {
             path: "/users/me/subscriptions/exist".into(),
-            params,
+            params: crate::Params::Query(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -63,9 +62,8 @@ impl Subscriptions {
     pub async fn videos(&self, auth: &crate::data::Token, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: "/users/me/subscriptions/videos".into(),
-            params,
+            params: crate::Params::Query(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -77,9 +75,8 @@ impl Subscriptions {
     pub async fn get(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<crate::data::Subscription> {
         let request = crate::Request {
             path: format!("/users/me/subscriptions/{}", handle),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -91,9 +88,8 @@ impl Subscriptions {
     pub async fn delete(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/users/me/subscriptions/{}", handle),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::delete::<crate::data::Empty, _>(&self.config, request)

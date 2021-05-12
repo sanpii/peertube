@@ -21,23 +21,53 @@ struct Config {
 
 struct Request<S: serde::Serialize> {
     path: String,
-    params: S,
+    params: Params<S>,
     auth: Option<data::Token>,
-    form: Option<reqwest::multipart::Form>,
+}
+
+enum Params<S: serde::Serialize> {
+    Query(S),
+    Json(S),
+    Form(S),
+    Multipart(S, reqwest::multipart::Form),
+    None,
+}
+
+impl Params<()> {
+    fn none() -> Self {
+        Params::None
+    }
+}
+
+impl<S: serde::Serialize> Params<S> {
+    fn multipart(params: S) -> Result<Self> {
+        let form = reqwest::multipart::Form::new();
+
+        Ok(Self::Multipart(params, form))
+    }
+
+    fn upload(params: S, name: &str, file: &str) -> Result<Self> {
+        let part = reqwest::multipart::Part::bytes(std::fs::read(file)?)
+            .file_name(file.to_string());
+
+        let form = reqwest::multipart::Form::new()
+            .part(name.to_string(), part);
+
+        Ok(Self::Multipart(params, form))
+    }
 }
 
 impl<S: serde::Serialize> Request<S> {
     fn into_request(self, method: reqwest::Method, base_url: &str) -> crate::Result<reqwest::RequestBuilder> {
-        let Request { path, params, auth, form } = self;
-        let url = format!("{}/api/v1{}", base_url, path);
+        let url = format!("{}/api/v1{}", base_url, self.path);
         let client = reqwest::Client::new();
-        let mut request = client.request(method.clone(), &url);
+        let mut request = client.request(method, &url);
 
-        request = match (method, path.as_str(), form) {
-            (reqwest::Method::GET, _, _) => request.query(&params),
-            (reqwest::Method::DELETE, _, _) => request.form(&params),
-            (reqwest::Method::POST, "/users/token", None) => request.form(&params),
-            (reqwest::Method::POST, _, Some(mut form)) => {
+        request = match self.params {
+            Params::Query(params) => request.query(&params),
+            Params::Json(params) => request.json(&params),
+            Params::Form(params) => request.form(&params),
+            Params::Multipart(params, mut form) => {
                 match serde_json::to_value(&params)? {
                     serde_json::Value::Object(map) => for (k, v) in map.iter() {
                         form = form.text(k.to_string(), v.to_string());
@@ -47,19 +77,11 @@ impl<S: serde::Serialize> Request<S> {
                 };
 
                 request.multipart(form)
-            },
-            _ => {
-                let body = serde_json::to_string(&params)?;
-
-                if body == "null" {
-                    request
-                } else {
-                    request.json(&params)
-                }
-            },
+            }
+            Params::None => request,
         };
 
-        if let Some(auth) = auth {
+        if let Some(auth) = self.auth {
             request = request.bearer_auth(&auth.access_token);
         }
 
@@ -77,9 +99,8 @@ impl From<String> for Request<()> {
     fn from(path: String) -> Self {
         Self {
             path,
-            params: (),
+            params: Params::None,
             auth: None,
-            form: None,
         }
     }
 }
@@ -122,9 +143,8 @@ impl Api {
 
         let request = Request {
             path: "/users/token".to_string(),
-            params,
+            params: Params::Form(params),
             auth: None,
-            form: None,
         };
         Self::post(&self.config, request).await
     }

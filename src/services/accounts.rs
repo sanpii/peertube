@@ -25,9 +25,8 @@ impl Accounts {
     pub async fn videos(&self, name: &str, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: format!("/accounts/{}/videos", name),
-            params,
+            params: crate::Params::Query(params),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -39,9 +38,8 @@ impl Accounts {
     pub async fn all(&self, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Account>> {
         let request = crate::Request {
             path: "/accounts".to_string(),
-            params: pagination,
+            params: crate::Params::Query(pagination),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -53,9 +51,8 @@ impl Accounts {
     pub async fn video_channels(&self, name: &str, params: &crate::param::Channels) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
             path: format!("/accounts/{}/video-channels", name),
-            params,
+            params: crate::Params::Query(params),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -67,9 +64,8 @@ impl Accounts {
     pub async fn ratings(&self, auth: &crate::data::Token, name: &str, params: &crate::param::Ratings) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
             path: format!("/accounts/{}/ratings", name),
-            params,
+            params: crate::Params::Query(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await

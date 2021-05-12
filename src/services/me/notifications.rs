@@ -15,9 +15,8 @@ impl Notifications {
     pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Notification) -> crate::Result<crate::Pager<crate::data::Notification>> {
         let request = crate::Request {
             path: "/users/me/notifications".into(),
-            params,
+            params: crate::Params::Query(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -27,13 +26,14 @@ impl Notifications {
      * Mark notifications as read by their id.
      */
     pub async fn read(&self, auth: &crate::data::Token, ids: &[u32]) -> crate::Result<()> {
+        let params = crate::param::Notifications {
+            ids: ids.to_vec(),
+        };
+
         let request = crate::Request {
             path: "/users/me/notifications/read".into(),
-            params: crate::param::Notifications {
-                ids: ids.to_vec(),
-            },
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post::<crate::data::Empty, _>(&self.config, request)
@@ -47,9 +47,8 @@ impl Notifications {
     pub async fn read_all(&self, auth: &crate::data::Token) -> crate::Result<()> {
         let request = crate::Request {
             path: "/users/me/notifications/read-all".into(),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post::<crate::data::Empty, _>(&self.config, request)
@@ -63,9 +62,8 @@ impl Notifications {
     pub async fn settings(&self, auth: &crate::data::Token, settings: &crate::param::NotificationSettings) -> crate::Result<()> {
         let request = crate::Request {
             path: "/users/me/notification-settings".into(),
-            params: settings,
+            params: crate::Params::Json(settings),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::put::<crate::data::Empty, _>(&self.config, request)

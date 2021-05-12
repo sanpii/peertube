@@ -15,9 +15,8 @@ impl History {
     pub async fn videos(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: "/users/me/history/videos".into(),
-            params: pagination,
+            params: crate::Params::Query(pagination),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -27,13 +26,14 @@ impl History {
      * Clear video history.
      */
     pub async fn clear(&self, auth: &crate::data::Token, before_date: &chrono::DateTime<chrono::offset::Utc>) -> crate::Result<()> {
+        let params = crate::param::History {
+            before_date: *before_date,
+        };
+
         let request = crate::Request {
             path: "/users/me/history/videos/remove".into(),
-            params: crate::param::History {
-                before_date: *before_date,
-            },
+            params: crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post::<crate::data::Empty, _>(&self.config, request)

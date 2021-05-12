@@ -15,9 +15,8 @@ impl Comments {
     pub async fn all(&self, video_id: &str, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Comment>> {
         let request = crate::Request {
             path: format!("/videos/{}/comment-threads", video_id),
-            params: pagination,
+            params: crate::Params::Query(pagination),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -29,11 +28,10 @@ impl Comments {
     pub async fn create(&self, auth: &crate::data::Token, video_id: &str, text: &str) -> crate::Result<crate::data::Comment> {
         let request = crate::Request {
             path: format!("/videos/{}/comment-threads", video_id),
-            params: crate::param::Comment {
+            params: crate::Params::Json(crate::param::Comment {
                 text: text.to_string()
-            },
+            }),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::post(&self.config, request).await
@@ -45,9 +43,8 @@ impl Comments {
     pub async fn get(&self, video_id: &str, thread_id: u32) -> crate::Result<crate::data::Thread> {
         let request = crate::Request {
             path: format!("/videos/{}/comment-threads/{}", video_id, thread_id),
-            params: (),
+            params: crate::Params::none(),
             auth: None,
-            form: None,
         };
 
         crate::Api::get(&self.config, request).await
@@ -57,13 +54,14 @@ impl Comments {
      * Reply to a thread of a video.
      */
     pub async fn reply(&self, auth: &crate::data::Token, video_id: &str, comment_id: u32, text: &str) -> crate::Result<crate::data::Comment> {
+        let params = crate::param::Comment {
+            text: text.to_string(),
+        };
+
         let request = crate::Request {
             path: format!("/videos/{}/comments/{}", video_id, comment_id),
-            params:  crate::param::Comment {
-                text: text.to_string(),
-            },
+            params:  crate::Params::Json(params),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         match crate::Api::post(&self.config, request).await? {
@@ -78,9 +76,8 @@ impl Comments {
     pub async fn delete(&self, auth: &crate::data::Token, video_id: &str, comment_id: u32) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/videos/{}/comments/{}", video_id, comment_id),
-            params: (),
+            params: crate::Params::none(),
             auth: Some(auth.clone()),
-            form: None,
         };
 
         crate::Api::get::<crate::data::Empty, _>(&self.config, request)
