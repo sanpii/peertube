@@ -262,7 +262,7 @@ impl Videos {
             auth: Some(auth.clone()),
         };
 
-        crate::Api::delete(&self.config, request).await
+        crate::Api::get(&self.config, request).await
     }
 }
 
