@@ -1,8 +1,8 @@
 mod accounts;
 mod servers;
 
-pub use accounts::*;
-pub use servers::*;
+pub use accounts::Accounts;
+pub use servers::Servers;
 
 pub struct Blocklist {
     pub accounts: Accounts,

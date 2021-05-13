@@ -2,9 +2,9 @@ mod history;
 mod notifications;
 mod subscriptions;
 
-pub use history::*;
-pub use notifications::*;
-pub use subscriptions::*;
+pub use history::History;
+pub use notifications::Notifications;
+pub use subscriptions::Subscriptions;
 
 pub struct Me {
     config: crate::Config,
