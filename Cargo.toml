@@ -29,4 +29,7 @@ features = ["derive"]
 [dev-dependencies]
 dotenv = "0.15"
 env_logger = "0.8"
-tokio-test = "0.4"
+
+[dev-dependencies.tokio]
+version = "1.5"
+features = ["macros", "rt"]

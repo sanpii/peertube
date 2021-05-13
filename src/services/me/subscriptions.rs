@@ -100,63 +100,63 @@ impl Subscriptions {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, token) = crate::test::api().await;
 
-        let subscriptions = tokio_test::block_on(
-            api.me.subscriptions.all(&token, &crate::param::Pagination::default())
-        );
+        let subscriptions = api.me.subscriptions.all(&token, &crate::param::Pagination::default())
+            .await;
+
         assert!(subscriptions.is_ok());
     }
 
-    #[test]
-    fn add() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn add() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.subscriptions.add(&token, "lqdn@video.lqdn.fr")
-        );
+        let status = api.me.subscriptions.add(&token, "lqdn@video.lqdn.fr")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn exist() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn exist() {
+        let (api, token) = crate::test::api().await;
 
-        let results = tokio_test::block_on(
-            api.me.subscriptions.exist(&token, &[&"lqdn@video.lqdn.fr"])
-        );
+        let results = api.me.subscriptions.exist(&token, &[&"lqdn@video.lqdn.fr"])
+            .await;
+
         assert_eq!(results.unwrap().get("lqdn@video.lqdn.fr"), Some(&false));
     }
 
-    #[test]
-    fn videos() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn videos() {
+        let (api, token) = crate::test::api().await;
 
-        let videos = tokio_test::block_on(
-            api.me.subscriptions.videos(&token, &crate::param::Videos::default())
-        );
+        let videos = api.me.subscriptions.videos(&token, &crate::param::Videos::default())
+            .await;
+
         assert!(videos.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn get() {
+        let (api, token) = crate::test::api().await;
 
-        let subscription = tokio_test::block_on(
-            api.me.subscriptions.get(&token, "lqdn@video.lqdn.fr")
-        );
+        let subscription = api.me.subscriptions.get(&token, "lqdn@video.lqdn.fr")
+            .await;
+
         assert!(subscription.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.subscriptions.delete(&token, "lqdn@video.lqdn.fr")
-        );
+        let status = api.me.subscriptions.delete(&token, "lqdn@video.lqdn.fr")
+            .await;
+
         assert!(status.is_ok());
     }
 }

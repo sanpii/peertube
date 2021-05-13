@@ -74,41 +74,41 @@ impl Notifications {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, token) = crate::test::api().await;
 
-        let notifications = tokio_test::block_on(
-            api.me.notifications.all(&token, &crate::param::Notification::default())
-        );
+        let notifications = api.me.notifications.all(&token, &crate::param::Notification::default())
+            .await;
+
         assert!(notifications.is_ok());
     }
 
-    #[test]
-    fn read() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn read() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.notifications.read(&token, &[1])
-        );
+        let status = api.me.notifications.read(&token, &[1])
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn read_all() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn read_all() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.notifications.read_all(&token)
-        );
+        let status = api.me.notifications.read_all(&token)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn settings() {
+    #[tokio::test]
+    async fn settings() {
         use crate::param::NotificationSettingsValue::*;
 
-        let (api, token) = crate::test::api();
+        let (api, token) = crate::test::api().await;
         let settings = crate::param::NotificationSettings {
             abuse_as_moderator: Both,
             auto_instance_following: Web,
@@ -124,9 +124,9 @@ mod test {
             video_auto_blacklist_as_moderator: Both,
         };
 
-        let status = tokio_test::block_on(
-            api.me.notifications.settings(&token, &settings)
-        );
+        let status = api.me.notifications.settings(&token, &settings)
+            .await;
+
         assert!(status.is_ok());
     }
 }

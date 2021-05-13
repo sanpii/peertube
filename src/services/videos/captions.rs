@@ -49,33 +49,33 @@ impl Captions {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, _) = crate::test::api().await;
 
-        let captions = tokio_test::block_on(
-            api.videos.captions.all("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
-        );
+        let captions = api.videos.captions.all("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
         assert!(captions.is_ok());
     }
 
-    #[test]
-    fn add() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn add() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.captions.add(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", "fr", "fixtures/caption.srt")
-        );
+        let status = api.videos.captions.add(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", "fr", "fixtures/caption.srt")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.captions.delete(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", "fr")
-        );
+        let status = api.videos.captions.delete(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", "fr")
+            .await;
+
         assert!(status.is_ok());
     }
 }

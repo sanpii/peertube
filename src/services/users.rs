@@ -100,9 +100,9 @@ impl Users {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn create() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn create() {
+        let (api, token) = crate::test::api().await;
         let param = crate::param::NewUser {
             email: "test@example.org".to_string(),
             password: "123456".to_string(),
@@ -110,60 +110,60 @@ mod test {
 
             .. Default::default()
         };
-        let user = tokio_test::block_on(
-            api.users.create(&token, &param)
-        );
+        let user = api.users.create(&token, &param)
+            .await;
+
         assert!(user.is_ok());
     }
 
-    #[test]
-    fn all() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, token) = crate::test::api().await;
 
-        let users = tokio_test::block_on(
-            api.users.all(&token, &crate::param::Users::default())
-        );
+        let users = api.users.all(&token, &crate::param::Users::default())
+            .await;
+
         assert!(users.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.users.delete(&token, 999)
-        );
+        let status = api.users.delete(&token, 999)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn get() {
+        let (api, token) = crate::test::api().await;
 
-        let user = tokio_test::block_on(
-            api.users.get(&token, 1)
-        );
+        let user = api.users.get(&token, 1)
+            .await;
+
         assert!(user.is_ok());
     }
 
-    #[test]
-    fn update() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
         let param = crate::param::User {
             id: 1,
             video_quota_daily: Some(100),
 
             .. Default::default()
         };
-        let user = tokio_test::block_on(
-            api.users.update(&token, 1, &param)
-        );
+        let user = api.users.update(&token, 1, &param)
+            .await;
+
         assert!(user.is_ok());
     }
 
-    #[test]
-    fn register() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn register() {
+        let (api, _) = crate::test::api().await;
         let param = crate::param::Register {
             email: "test@example.org".to_string(),
             password: "123456".to_string(),
@@ -171,9 +171,9 @@ mod test {
 
             .. Default::default()
         };
-        let user = tokio_test::block_on(
-            api.users.register(&param)
-        );
+        let user = api.users.register(&param)
+            .await;
+
         assert!(user.is_ok());
     }
 }

@@ -68,43 +68,43 @@ impl Ownership {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, token) = crate::test::api().await;
 
-        let ownerships = tokio_test::block_on(
-            api.videos.ownership.all(&token)
-        );
+        let ownerships = api.videos.ownership.all(&token)
+            .await;
+
         assert!(ownerships.is_ok());
     }
 
-    #[test]
-    fn accept() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn accept() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.ownership.accept(&token, "")
-        );
+        let status = api.videos.ownership.accept(&token, "")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn refuse() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn refuse() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.ownership.refuse(&token, "")
-        );
+        let status = api.videos.ownership.refuse(&token, "")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn change() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn change() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.ownership.create(&token, "", "username")
-        );
+        let status = api.videos.ownership.create(&token, "", "username")
+            .await;
+
         assert!(status.is_ok());
     }
 }

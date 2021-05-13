@@ -192,119 +192,119 @@ impl Videos {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, _) = crate::test::api().await;
 
-        let videos = tokio_test::block_on(
-            api.videos.all(&crate::param::Videos::default())
-        );
+        let videos = api.videos.all(&crate::param::Videos::default())
+            .await;
+
         assert!(videos.is_ok());
     }
 
-    #[test]
-    fn categories() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn categories() {
+        let (api, _) = crate::test::api().await;
 
-        let categories = tokio_test::block_on(
-            api.videos.categories()
-        );
+        let categories = api.videos.categories()
+            .await;
+
         assert!(categories.is_ok());
     }
 
-    #[test]
-    fn licences() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn licences() {
+        let (api, _) = crate::test::api().await;
 
-        let licences = tokio_test::block_on(
-            api.videos.licences()
-        );
+        let licences = api.videos.licences()
+            .await;
+
         assert!(licences.is_ok());
     }
 
-    #[test]
-    fn languages() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn languages() {
+        let (api, _) = crate::test::api().await;
 
-        let languages = tokio_test::block_on(
-            api.videos.languages()
-        );
+        let languages = api.videos.languages()
+            .await;
+
         assert!(languages.is_ok());
     }
 
-    #[test]
-    fn privacies() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn privacies() {
+        let (api, _) = crate::test::api().await;
 
-        let privacies = tokio_test::block_on(
-            api.videos.privacies()
-        );
+        let privacies = api.videos.privacies()
+            .await;
+
         assert!(privacies.is_ok());
     }
 
-    #[test]
-    fn update() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.update(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", &crate::param::Video::default())
-        );
+        let status = api.videos.update(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", &crate::param::Video::default())
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn get() {
+        let (api, _) = crate::test::api().await;
 
-        let video = tokio_test::block_on(
-            api.videos.get("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
-        );
+        let video = api.videos.get("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
         assert!(video.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.delete(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128")
-        );
+        let status = api.videos.delete(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn description() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn description() {
+        let (api, _) = crate::test::api().await;
 
-        let description = tokio_test::block_on(
-            api.videos.description("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
-        );
+        let description = api.videos.description("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
         assert!(description.is_ok());
     }
 
-    #[test]
-    fn add_view() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn add_view() {
+        let (api, _) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.add_view("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
-        );
+        let status = api.videos.add_view("1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn set_watching() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn set_watching() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.set_watching(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", 10)
-        );
+        let status = api.videos.set_watching(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", 10)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn upload() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn upload() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::NewVideo {
             channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
             name: "test".to_string(),
@@ -312,15 +312,15 @@ mod test {
             .. Default::default()
         };
 
-        let video = tokio_test::block_on(
-            api.videos.upload(&token, "fixtures/video.mp4", &params)
-        );
+        let video = api.videos.upload(&token, "fixtures/video.mp4", &params)
+            .await;
+
         assert!(video.is_ok());
     }
 
-    #[test]
-    fn import() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn import() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::Import {
             video: crate::param::NewVideo {
                 channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
@@ -333,19 +333,19 @@ mod test {
             .. Default::default()
         };
 
-        let video = tokio_test::block_on(
-            api.videos.import(&token, &params)
-        );
+        let video = api.videos.import(&token, &params)
+            .await;
+
         assert!(video.is_ok());
     }
 
-    #[test]
-    fn rate() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn rate() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.rate(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", crate::param::Rating::Like)
-        );
+        let status = api.videos.rate(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128", crate::param::Rating::Like)
+            .await;
+
         assert!(status.is_ok());
     }
 }

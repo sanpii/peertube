@@ -202,27 +202,27 @@ mod test {
         std::env::var("PASSWORD").unwrap()
     }
 
-    pub(crate) fn api() -> (crate::Api, crate::data::Token) {
+    pub(crate) async fn api() -> (crate::Api, crate::data::Token) {
         dotenv::dotenv().ok();
         env_logger::try_init().ok();
 
         let api = crate::Api::new(&instance());
-        let token = tokio_test::block_on(
-            api.auth(&username(), &password())
-        ).unwrap();
+        let token = api.auth(&username(), &password())
+            .await
+            .unwrap();
 
         (api, token)
     }
 
-    #[test]
-    fn auth() {
-        let (api, _) = crate::test::api();
-        let auth = tokio_test::block_on(
-            api.auth(
-                &crate::test::username(),
-                &crate::test::password(),
-            )
-        );
+    #[tokio::test]
+    async fn auth() {
+        let (api, _) = crate::test::api().await;
+
+        let auth = api.auth(
+            &crate::test::username(),
+            &crate::test::password(),
+        ).await;
+
         assert!(auth.is_ok());
     }
 }

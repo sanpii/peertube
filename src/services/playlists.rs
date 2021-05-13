@@ -178,104 +178,104 @@ impl Playlists {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn privacies() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn privacies() {
+        let (api, _) = crate::test::api().await;
 
-        let privacies = tokio_test::block_on(
-            api.playlists.privacies()
-        );
+        let privacies = api.playlists.privacies()
+            .await;
+
         assert!(privacies.is_ok());
     }
 
-    #[test]
-    fn all() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, _) = crate::test::api().await;
 
-        let playlists = tokio_test::block_on(
-            api.playlists.all(&crate::param::Pagination::default())
-        );
+        let playlists = api.playlists.all(&crate::param::Pagination::default())
+            .await;
+
         assert!(playlists.is_ok());
     }
 
-    #[test]
-    fn create() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn create() {
+        let (api, token) = crate::test::api().await;
         let playlist = crate::param::Playlist {
             display_name: "playlist".to_string(),
 
             .. Default::default()
         };
 
-        let status = tokio_test::block_on(
-            api.playlists.create(&token, &playlist)
-        );
+        let status = api.playlists.create(&token, &playlist)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn get() {
+        let (api, _) = crate::test::api().await;
 
-        let playlist = tokio_test::block_on(
-            api.playlists.get(None, "cdd3d948-5262-4460-b427-ac2e8003e6f7")
-        );
+        let playlist = api.playlists.get(None, "cdd3d948-5262-4460-b427-ac2e8003e6f7")
+            .await;
+
         assert!(playlist.is_ok());
     }
 
-    #[test]
-    fn update() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::PlaylistSetting {
             display_name: Some("playlist 2".to_string()),
 
             .. Default::default()
         };
 
-        let status = tokio_test::block_on(
-            api.playlists.update(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &params)
-        );
+        let status = api.playlists.update(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &params)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.playlists.delete(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7")
-        );
+        let status = api.playlists.delete(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn videos() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn videos() {
+        let (api, _) = crate::test::api().await;
 
-        let playlist = tokio_test::block_on(
-            api.playlists.get(None, "cdd3d948-5262-4460-b427-ac2e8003e6f7")
-        );
+        let playlist = api.playlists.get(None, "cdd3d948-5262-4460-b427-ac2e8003e6f7")
+            .await;
+
         assert!(playlist.is_ok());
     }
 
-    #[test]
-    fn add_video() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn add_video() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::PlaylistElement {
             video_id: 10,
 
             .. Default::default()
         };
 
-        let element = tokio_test::block_on(
-            api.playlists.add_video(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &params)
-        );
+        let element = api.playlists.add_video(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &params)
+            .await;
+
         assert!(element.is_ok());
     }
 
-    #[test]
-    fn reorder() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn reorder() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::Reorder {
             insert_after_position: 2,
             start_position: 1,
@@ -283,45 +283,45 @@ mod test {
             .. Default::default()
         };
 
-        let status = tokio_test::block_on(
-            api.playlists.reorder(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &params)
-        );
+        let status = api.playlists.reorder(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &params)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn update_video() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update_video() {
+        let (api, token) = crate::test::api().await;
         let element = crate::param::PlaylistElement {
             video_id: 10,
 
             .. Default::default()
         };
 
-        let status = tokio_test::block_on(
-            api.playlists.update_video(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &element)
-        );
+        let status = api.playlists.update_video(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", &element)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete_video() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete_video() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.playlists.delete_video(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", "10")
-        );
+        let status = api.playlists.delete_video(&token, "cdd3d948-5262-4460-b427-ac2e8003e6f7", "10")
+            .await;
+
         assert!(status.is_ok());
     }
 
 
-    #[test]
-    fn exists() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn exists() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.playlists.exists(&token, &["10"])
-        );
+        let status = api.playlists.exists(&token, &["10"])
+            .await;
+
         assert!(status.is_ok());
     }
 }

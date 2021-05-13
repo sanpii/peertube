@@ -53,9 +53,9 @@ impl Live {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn create() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn create() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::Live {
             video: crate::param::NewVideo {
                 channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
@@ -67,32 +67,32 @@ mod test {
             .. Default::default()
         };
 
-        let video = tokio_test::block_on(
-            api.videos.live.create(&token, &params)
-        );
+        let video = api.videos.live.create(&token, &params)
+            .await;
+
         assert!(video.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, token) = crate::test::api();
-        let live = tokio_test::block_on(
-            api.videos.live.get(&token, "04193a18-7abc-4803-bec7-c75d9888256f")
-        );
+    #[tokio::test]
+    async fn get() {
+        let (api, token) = crate::test::api().await;
+        let live = api.videos.live.get(&token, "04193a18-7abc-4803-bec7-c75d9888256f")
+            .await;
+
         assert!(live.is_ok());
     }
 
-    #[test]
-    fn update() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::LiveSetting {
             save_replay: Some(true),
             permanent_live: Some(false),
         };
 
-        let status = tokio_test::block_on(
-            api.videos.live.update(&token, "04193a18-7abc-4803-bec7-c75d9888256f", &params)
-        );
+        let status = api.videos.live.update(&token, "04193a18-7abc-4803-bec7-c75d9888256f", &params)
+            .await;
+
         assert!(status.is_ok());
     }
 }

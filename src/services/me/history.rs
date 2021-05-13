@@ -44,23 +44,23 @@ impl History {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn videos() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn videos() {
+        let (api, token) = crate::test::api().await;
 
-        let videos = tokio_test::block_on(
-            api.me.history.videos(&token, &crate::param::Pagination::default())
-        );
+        let videos = api.me.history.videos(&token, &crate::param::Pagination::default())
+            .await;
+
         assert!(videos.is_ok());
     }
 
-    #[test]
-    fn clear() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn clear() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.history.clear(&token, &chrono::offset::Utc::now())
-        );
+        let status = api.me.history.clear(&token, &chrono::offset::Utc::now())
+            .await;
+
         assert!(status.is_ok());
     }
 }

@@ -147,19 +147,19 @@ impl Me {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn info() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn info() {
+        let (api, token) = crate::test::api().await;
 
-        let info = tokio_test::block_on(
-            api.me.info(&token)
-        );
+        let info = api.me.info(&token)
+            .await;
+
         assert!(info.is_ok());
     }
 
-    #[test]
-    fn update() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
         let param = crate::param::Me {
             auto_play_video: false,
             display_nsfw: crate::param::DisplayNsfw::True,
@@ -167,79 +167,79 @@ mod test {
             password: "123456".to_string(),
         };
 
-        let status = tokio_test::block_on(
-            api.me.update(&token, &param)
-        );
+        let status = api.me.update(&token, &param)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn imports() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn imports() {
+        let (api, token) = crate::test::api().await;
 
-        let imports = tokio_test::block_on(
-            api.me.imports(&token, &crate::param::Pagination::default())
-        );
+        let imports = api.me.imports(&token, &crate::param::Pagination::default())
+            .await;
+
         assert!(imports.is_ok());
     }
 
-    #[test]
-    fn quota() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn quota() {
+        let (api, token) = crate::test::api().await;
 
-        let quota = tokio_test::block_on(
-            api.me.quota(&token)
-        );
+        let quota = api.me.quota(&token)
+            .await;
+
         assert!(quota.is_ok());
     }
 
-    #[test]
-    fn video_rating() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn video_rating() {
+        let (api, token) = crate::test::api().await;
 
-        let rating = tokio_test::block_on(
-            api.me.video_rating(&token, "a83e96ce-0709-4b48-80e3-1462c88d9cc8")
-        );
+        let rating = api.me.video_rating(&token, "a83e96ce-0709-4b48-80e3-1462c88d9cc8")
+            .await;
+
         assert!(rating.is_ok());
     }
 
-    #[test]
-    fn videos() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn videos() {
+        let (api, token) = crate::test::api().await;
 
-        let videos = tokio_test::block_on(
-            api.me.videos(&token, &crate::param::Pagination::default())
-        );
+        let videos = api.me.videos(&token, &crate::param::Pagination::default())
+            .await;
+
         assert!(videos.is_ok());
     }
 
-    #[test]
-    fn update_avatar() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update_avatar() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.update_avatar(&token, "")
-        );
+        let status = api.me.update_avatar(&token, "")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete_avatar() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete_avatar() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.me.delete_avatar(&token)
-        );
+        let status = api.me.delete_avatar(&token)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn abuses() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn abuses() {
+        let (api, token) = crate::test::api().await;
 
-        let abuses = tokio_test::block_on(
-            api.me.abuses(&token, &crate::param::Abuse::default())
-        );
+        let abuses = api.me.abuses(&token, &crate::param::Abuse::default())
+            .await;
+
         assert!(dbg!(abuses).is_ok());
     }
 }

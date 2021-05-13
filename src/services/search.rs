@@ -38,33 +38,33 @@ impl Search {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn videos() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn videos() {
+        let (api, _) = crate::test::api().await;
         let params = crate::param::SearchVideos {
             search: "clément".to_string(),
 
             .. Default::default()
         };
 
-        let videos = tokio_test::block_on(
-            api.search.videos(&params)
-        );
+        let videos = api.search.videos(&params)
+            .await;
+
         assert!(videos.is_ok());
     }
 
-    #[test]
-    fn channels() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn channels() {
+        let (api, _) = crate::test::api().await;
         let params = crate::param::SearchChannels {
             search: "clément".to_string(),
 
             .. Default::default()
         };
 
-        let channels = tokio_test::block_on(
-            api.search.channels(&params)
-        );
+        let channels = api.search.channels(&params)
+            .await;
+
         assert!(channels.is_ok());
     }
 }

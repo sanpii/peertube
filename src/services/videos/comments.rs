@@ -88,53 +88,53 @@ impl Comments {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, _) = crate::test::api().await;
 
-        let comments = tokio_test::block_on(
-            api.videos.comments.all("601539e5-6bf9-42eb-9f5b-b9ede7635bda", &crate::param::Pagination::default())
-        );
+        let comments = api.videos.comments.all("601539e5-6bf9-42eb-9f5b-b9ede7635bda", &crate::param::Pagination::default())
+            .await;
+
         assert!(comments.is_ok());
     }
 
-    #[test]
-    fn create() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn create() {
+        let (api, token) = crate::test::api().await;
 
-        let comment = tokio_test::block_on(
-            api.videos.comments.create(&token, "601539e5-6bf9-42eb-9f5b-b9ede7635bda", "new comment")
-        );
+        let comment = api.videos.comments.create(&token, "601539e5-6bf9-42eb-9f5b-b9ede7635bda", "new comment")
+            .await;
+
         assert!(comment.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn get() {
+        let (api, _) = crate::test::api().await;
 
-        let comment = tokio_test::block_on(
-            api.videos.comments.get("601539e5-6bf9-42eb-9f5b-b9ede7635bda", 12005)
-        );
+        let comment = api.videos.comments.get("601539e5-6bf9-42eb-9f5b-b9ede7635bda", 12005)
+            .await;
+
         assert!(comment.is_ok());
     }
 
-    #[test]
-    fn reply() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn reply() {
+        let (api, token) = crate::test::api().await;
 
-        let comment = tokio_test::block_on(
-            api.videos.comments.reply(&token, "601539e5-6bf9-42eb-9f5b-b9ede7635bda", 12005, "reply")
-        );
+        let comment = api.videos.comments.reply(&token, "601539e5-6bf9-42eb-9f5b-b9ede7635bda", 12005, "reply")
+            .await;
+
         assert!(comment.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.videos.comments.delete(&token, "601539e5-6bf9-42eb-9f5b-b9ede7635bda", 12005)
-        );
+        let status = api.videos.comments.delete(&token, "601539e5-6bf9-42eb-9f5b-b9ede7635bda", 12005)
+            .await;
+
         assert!(status.is_ok());
     }
 }

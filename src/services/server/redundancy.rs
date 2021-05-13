@@ -59,37 +59,37 @@ impl Redundancy {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::Redundancies {
             target: crate::param::MirrorDirection::RemoteVideos,
             pagination: Default::default(),
         };
 
-        let redundancies = tokio_test::block_on(
-            api.server.redundancy.all(&token, &params)
-        );
+        let redundancies = api.server.redundancy.all(&token, &params)
+            .await;
+
         assert!(redundancies.is_ok());
     }
 
-    #[test]
-    fn add() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn add() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.server.redundancy.add(&token, "42")
-        );
+        let status = api.server.redundancy.add(&token, "42")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.server.redundancy.delete(&token, "42")
-        );
+        let status = api.server.redundancy.delete(&token, "42")
+            .await;
+
         assert!(status.is_ok());
     }
 }

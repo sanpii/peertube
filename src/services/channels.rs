@@ -112,19 +112,19 @@ impl Channels {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn all() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn all() {
+        let (api, _) = crate::test::api().await;
 
-        let channels = tokio_test::block_on(
-            api.channels.all()
-        );
+        let channels = api.channels.all()
+            .await;
+
         assert!(channels.is_ok());
     }
 
-    #[test]
-    fn create() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn create() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::Channel {
             display_name: "New channel".to_string(),
             name: "new-channel".to_string(),
@@ -132,74 +132,74 @@ mod test {
             .. Default::default()
         };
 
-        let status = tokio_test::block_on(
-            api.channels.create(&token, &params)
-        );
+        let status = api.channels.create(&token, &params)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn get() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn get() {
+        let (api, _) = crate::test::api().await;
 
-        let channel = tokio_test::block_on(
-            api.channels.get("edl@tube.homecomputing.fr")
-        );
+        let channel = api.channels.get("edl@tube.homecomputing.fr")
+            .await;
+
         assert!(channel.is_ok());
     }
 
-    #[test]
-    fn update() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
         let params = crate::param::ChannelSetting {
             display_name: Some("New channel name".to_string()),
 
             .. Default::default()
         };
 
-        let status = tokio_test::block_on(
-            api.channels.update(&token, "new-channel", &params)
-        );
+        let status = api.channels.update(&token, "new-channel", &params)
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.channels.delete(&token, "new-channel")
-        );
+        let status = api.channels.delete(&token, "new-channel")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn videos() {
-        let (api, _) = crate::test::api();
+    #[tokio::test]
+    async fn videos() {
+        let (api, _) = crate::test::api().await;
 
-        let channel = tokio_test::block_on(
-            api.channels.videos("58edd166-dab0-4a1e-86e3-85778b78ba77", &crate::param::Videos::default())
-        );
+        let channel = api.channels.videos("58edd166-dab0-4a1e-86e3-85778b78ba77", &crate::param::Videos::default())
+            .await;
+
         assert!(channel.is_ok());
     }
 
-    #[test]
-    fn update_avatar() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn update_avatar() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.channels.update_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77", "fixtures/avatar.png")
-        );
+        let status = api.channels.update_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77", "fixtures/avatar.png")
+            .await;
+
         assert!(status.is_ok());
     }
 
-    #[test]
-    fn delete_avatar() {
-        let (api, token) = crate::test::api();
+    #[tokio::test]
+    async fn delete_avatar() {
+        let (api, token) = crate::test::api().await;
 
-        let status = tokio_test::block_on(
-            api.channels.delete_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77")
-        );
+        let status = api.channels.delete_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77")
+            .await;
+
         assert!(status.is_ok());
     }
 }

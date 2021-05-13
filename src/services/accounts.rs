@@ -74,51 +74,52 @@ impl Accounts {
 
 #[cfg(test)]
 mod test {
-    #[test]
-    fn account() {
-        let (api, _) = crate::test::api();
-        let account = tokio_test::block_on(
-            api.accounts.get(&crate::test::username())
-        ).unwrap();
+    #[tokio::test]
+    async fn account() {
+        let (api, _) = crate::test::api().await;
+        let account = api.accounts.get(&crate::test::username())
+            .await
+            .unwrap();
+
         assert_eq!(account.display_name, crate::test::username());
     }
 
-    #[test]
-    fn account_videos() {
-        let (api, _) = crate::test::api();
-        let videos = tokio_test::block_on(
-            api.accounts.videos(&crate::test::username(), &crate::param::Videos::default())
-        );
+    #[tokio::test]
+    async fn account_videos() {
+        let (api, _) = crate::test::api().await;
+        let videos = api.accounts.videos(&crate::test::username(), &crate::param::Videos::default())
+            .await;
+
         assert!(videos.is_ok());
     }
 
-    #[test]
-    fn accounts() {
-        let (api, _) = crate::test::api();
-        let accounts = tokio_test::block_on(
-            api.accounts.all(&crate::param::Pagination {
-                count: Some(2),
-                .. Default::default()
-            })
-        ).unwrap();
+    #[tokio::test]
+    async fn accounts() {
+        let (api, _) = crate::test::api().await;
+
+        let accounts = api.accounts.all(&crate::param::Pagination {
+            count: Some(2),
+            .. Default::default()
+        }).await.unwrap();
+
         assert_eq!(accounts.data.len(), 2);
     }
 
-    #[test]
-    fn account_video_channels() {
-        let (api, _) = crate::test::api();
-        let channels = tokio_test::block_on(
-            api.accounts.video_channels(&crate::test::username(), &crate::param::Channels::default())
-        );
+    #[tokio::test]
+    async fn account_video_channels() {
+        let (api, _) = crate::test::api().await;
+        let channels = api.accounts.video_channels(&crate::test::username(), &crate::param::Channels::default())
+            .await;
+
         assert!(channels.is_ok());
     }
 
-    #[test]
-    fn accountratings() {
-        let (api, token) = crate::test::api();
-        let ratings = tokio_test::block_on(
-            api.accounts.ratings(&token, &crate::test::username(), &crate::param::Ratings::default())
-        );
+    #[tokio::test]
+    async fn accountratings() {
+        let (api, token) = crate::test::api().await;
+        let ratings = api.accounts.ratings(&token, &crate::test::username(), &crate::param::Ratings::default())
+            .await;
+
         assert!(ratings.is_ok());
     }
 }
