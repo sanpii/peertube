@@ -1,16 +1,18 @@
+mod blocklist;
 mod redundancy;
 
+pub use blocklist::*;
 pub use redundancy::*;
 
 pub struct Server {
-    config: crate::Config,
+    pub blocklist: Blocklist,
     pub redundancy: Redundancy,
 }
 
 impl Server {
     pub(crate) fn new(config: &crate::Config) -> Self {
         Self {
-            config: config.clone(),
+            blocklist: Blocklist::new(config),
             redundancy: Redundancy::new(config),
         }
     }

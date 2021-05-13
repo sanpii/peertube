@@ -540,3 +540,17 @@ pub struct VideoBlacklist {
     pub video_id: u32,
     pub views: u32,
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BlockedServer {
+    pub by_account: Account,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub blocked_server: Server,
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Server {
+    pub host: String,
+}
