@@ -629,3 +629,9 @@ pub enum ActorType {
     Service,
     Organization,
 }
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct RedundancySetting {
+    pub redundancy_allowed: bool,
+}

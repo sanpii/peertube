@@ -55,6 +55,25 @@ impl Redundancy {
             .await?
             .into()
     }
+
+    /**
+     * Update a server redundancy policy.
+     */
+    pub async fn update(&self, auth: &crate::data::Token, host: &str, allowed: bool) -> crate::Result<()> {
+        let params = crate::param::RedundancySetting {
+            redundancy_allowed: allowed,
+        };
+
+        let request = crate::Request {
+            path: format!("/server/redundancy/{}", host),
+            params: crate::Params::Json(params),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
+    }
 }
 
 #[cfg(test)]
@@ -88,6 +107,16 @@ mod test {
         let (api, token) = crate::test::api().await;
 
         let status = api.server.redundancy.delete(&token, "42")
+            .await;
+
+        assert!(status.is_ok());
+    }
+
+    #[tokio::test]
+    async fn update() {
+        let (api, token) = crate::test::api().await;
+
+        let status = api.server.redundancy.update(&token, "example.org", true)
             .await;
 
         assert!(status.is_ok());
