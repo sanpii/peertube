@@ -604,3 +604,28 @@ pub enum BlacklistType {
     Manual = 1,
     Automatic = 2,
 }
+
+#[derive(Debug, serde::Serialize)]
+pub(crate) struct Following {
+    pub host: String,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+pub struct Followings {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actor_type: Option<ActorType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<crate::data::FollowState>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum ActorType {
+    Person,
+    Application,
+    Group,
+    Service,
+    Organization,
+}

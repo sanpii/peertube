@@ -572,3 +572,22 @@ pub struct BlockedAccount {
 pub(crate) struct AccountName {
     pub account_name: String,
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Follow {
+    pub id: u32,
+    pub score: u32,
+    pub state: FollowState,
+    pub follower: Account,
+    pub following: Account,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum FollowState {
+    Pending,
+    Accepted,
+}
