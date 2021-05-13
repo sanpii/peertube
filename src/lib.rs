@@ -106,10 +106,11 @@ impl From<String> for Request<()> {
 }
 
 pub struct Api {
-    config: Config,
+    conf: Config,
     pub abuses: services::Abuses,
     pub accounts: services::Accounts,
     pub channels: services::Channels,
+    pub config: services::Config,
     pub me: services::Me,
     pub playlists: services::Playlists,
     pub search: services::Search,
@@ -120,26 +121,27 @@ pub struct Api {
 
 impl Api {
     pub fn new(base_url: &str) -> Self {
-        let config = Config {
+        let conf = Config {
             base_url: base_url.to_string(),
         };
 
         Self {
-            abuses: services::Abuses::new(&config),
-            accounts: services::Accounts::new(&config),
-            channels: services::Channels::new(&config),
-            me: services::Me::new(&config),
-            playlists: services::Playlists::new(&config),
-            search: services::Search::new(&config),
-            server: services::Server::new(&config),
-            users: services::Users::new(&config),
-            videos: services::Videos::new(&config),
-            config,
+            abuses: services::Abuses::new(&conf),
+            accounts: services::Accounts::new(&conf),
+            channels: services::Channels::new(&conf),
+            config: services::Config::new(&conf),
+            me: services::Me::new(&conf),
+            playlists: services::Playlists::new(&conf),
+            search: services::Search::new(&conf),
+            server: services::Server::new(&conf),
+            users: services::Users::new(&conf),
+            videos: services::Videos::new(&conf),
+            conf,
         }
     }
 
     pub async fn auth(&self, username: &str, password: &str) -> crate::Result<data::Token> {
-        let oauth_clients: data::OauthClient = Self::get(&self.config, "/oauth-clients/local".into()).await?;
+        let oauth_clients: data::OauthClient = Self::get(&self.conf, "/oauth-clients/local".into()).await?;
         let params = param::Auth {
             client_id: oauth_clients.client_id,
             client_secret: oauth_clients.client_secret,
@@ -154,7 +156,7 @@ impl Api {
             params: Params::Form(params),
             auth: None,
         };
-        Self::post(&self.config, request).await
+        Self::post(&self.conf, request).await
     }
 
     pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {

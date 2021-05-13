@@ -1,6 +1,7 @@
 mod abuses;
 mod accounts;
 mod channels;
+mod config;
 mod me;
 mod playlists;
 mod search;
@@ -11,6 +12,7 @@ mod videos;
 pub use abuses::Abuses;
 pub use accounts::Accounts;
 pub use channels::Channels;
+pub use config::Config;
 pub use me::Me;
 pub use playlists::Playlists;
 pub use search::Search;

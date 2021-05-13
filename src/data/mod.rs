@@ -1,3 +1,7 @@
+pub mod config;
+
+pub use config::Config;
+
 #[derive(Debug)]
 pub(crate) struct Empty;
 
