@@ -635,3 +635,15 @@ pub enum ActorType {
 pub(crate) struct RedundancySetting {
     pub redundancy_allowed: bool,
 }
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct Plugin {
+    pub npm_name: String,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PluginSettings {
+    //pub settings: (),
+}

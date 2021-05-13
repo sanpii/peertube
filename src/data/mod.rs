@@ -591,3 +591,45 @@ pub enum FollowState {
     Pending,
     Accepted,
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Plugin {
+    pub name: String,
+    pub r#type: u32,
+    pub latest_version: String,
+    pub version: String,
+    pub enabled: bool,
+    pub uninstalled: bool,
+    pub peertube_engine: String,
+    pub description: String,
+    pub homepage: String,
+    //pub settings: (),
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AvailablePlugin {
+    pub npm_name: String,
+    pub description: String,
+    pub homepage: String,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub popularity: f32,
+    pub latest_version: String,
+    pub installed: bool,
+    pub name: String,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PublicSettings {
+    //pub public_settings: (),
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RegisteredSettings {
+}
