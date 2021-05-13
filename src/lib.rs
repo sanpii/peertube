@@ -10,8 +10,8 @@ pub use errors::*;
 
 #[derive(Debug, serde::Deserialize)]
 pub struct Pager<T> {
-    total: usize,
-    data: Vec<T>,
+    pub total: usize,
+    pub data: Vec<T>,
 }
 
 #[derive(Clone)]
