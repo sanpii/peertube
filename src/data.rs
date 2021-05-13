@@ -524,3 +524,19 @@ pub struct AbuseMessage {
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub account: AccountSummary,
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoBlacklist {
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub description: String,
+    pub dislikes: u32,
+    pub duration: u32,
+    pub id: u32,
+    pub likes: u32,
+    pub name: String,
+    pub nfsw: bool,
+    pub uuid: String,
+    pub video_id: u32,
+    pub views: u32,
+}

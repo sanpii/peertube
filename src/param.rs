@@ -586,3 +586,21 @@ pub struct AbuseSetting {
 pub(crate) struct AbuseMessage {
     pub message: String,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct VideoBlacklists {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub r#type: Option<BlacklistType>,
+}
+
+#[derive(Debug, serde_repr::Serialize_repr)]
+#[repr(u8)]
+pub enum BlacklistType {
+    Manual = 1,
+    Automatic = 2,
+}

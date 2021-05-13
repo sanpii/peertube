@@ -188,6 +188,49 @@ impl Videos {
             .await?
             .into()
     }
+
+    /**
+     * Block a video.
+     */
+    pub async fn block(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
+        let request = crate::Request {
+            path: format!("/videos/{}/blacklist", id),
+            params: crate::Params::none(),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::post::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
+    }
+
+    /**
+     * Unblock a video.
+     */
+    pub async fn unblock(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
+        let request = crate::Request {
+            path: format!("/videos/{}/blacklist", id),
+            params: crate::Params::none(),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
+            .await?
+            .into()
+    }
+
+    /**
+     * List video blocks.
+     */
+    pub async fn blacklist(&self, auth: &crate::data::Token, pagination: &crate::param::VideoBlacklists) -> crate::Result<crate::Pager<crate::data::VideoBlacklist>> {
+        let request = crate::Request {
+            path: "/videos/blacklist".to_string(),
+            params: crate::Params::Query(pagination),
+            auth: Some(auth.clone()),
+        };
+
+        crate::Api::delete(&self.config, request).await
+    }
 }
 
 #[cfg(test)]
@@ -347,5 +390,35 @@ mod test {
             .await;
 
         assert!(status.is_ok());
+    }
+
+    #[tokio::test]
+    async fn block() {
+        let (api, token) = crate::test::api().await;
+
+        let status = api.videos.block(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
+        assert!(status.is_ok());
+    }
+
+    #[tokio::test]
+    async fn unblock() {
+        let (api, token) = crate::test::api().await;
+
+        let status = api.videos.unblock(&token, "1cb3e9c4-2da6-4af3-804e-d4675c18e128")
+            .await;
+
+        assert!(status.is_ok());
+    }
+
+    #[tokio::test]
+    async fn blacklist() {
+        let (api, token) = crate::test::api().await;
+
+        let blacklists = api.videos.blacklist(&token, &crate::param::VideoBlacklists::default())
+            .await;
+
+        assert!(blacklists.is_ok());
     }
 }
