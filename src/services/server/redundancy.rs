@@ -29,10 +29,8 @@ impl Redundancy {
     /**
      * Mirror a video.
      */
-    pub async fn add(&self, auth: &crate::data::Token, video_id: &str) -> crate::Result<()> {
-        let params = crate::param::Redundancy {
-            video_id: video_id.to_string(),
-        };
+    pub async fn add(&self, auth: &crate::data::Token, video_id: u32) -> crate::Result<()> {
+        let params = crate::param::Redundancy { video_id };
 
         let request = crate::Request {
             path: "/server/redundancy/videos".to_string(),

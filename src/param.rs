@@ -454,7 +454,7 @@ pub enum MirrorDirection {
 #[derive(Debug, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Redundancy {
-    pub video_id: String,
+    pub video_id: u32,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
