@@ -554,3 +554,17 @@ pub struct BlockedServer {
 pub struct Server {
     pub host: String,
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BlockedAccount {
+    pub by_account: Account,
+    pub blocked_account: Account,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct AccountName {
+    pub account_name: String,
+}

@@ -1,7 +1,7 @@
 mod blocklist;
 mod redundancy;
 
-pub use blocklist::*;
+pub use blocklist::Blocklist;
 pub use redundancy::*;
 
 pub struct Server {
