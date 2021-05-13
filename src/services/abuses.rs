@@ -73,9 +73,7 @@ impl Abuses {
             auth: Some(auth.clone()),
         };
 
-        crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
-            .await?
-            .into()
+        crate::Api::delete(&self.config, request).await
     }
 
     /**
@@ -132,9 +130,7 @@ impl Abuses {
             auth: Some(auth.clone()),
         };
 
-        crate::Api::delete::<crate::data::Empty, _>(&self.config, request)
-            .await?
-            .into()
+        crate::Api::delete(&self.config, request).await
     }
 }
 

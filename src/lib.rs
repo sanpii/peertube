@@ -183,11 +183,13 @@ impl Api {
         Self::request(reqwest::Method::POST, config, request).await
     }
 
-    pub(crate) async fn delete<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+    pub(crate) async fn delete<P: serde::Serialize>(
         config: &Config,
         request: Request<P>,
-    ) -> crate::Result<T> {
-        Self::request(reqwest::Method::DELETE, config, request).await
+    ) -> crate::Result<()> {
+        Self::request::<data::Empty, _>(reqwest::Method::DELETE, config, request)
+            .await?
+            .into()
     }
 
     pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
