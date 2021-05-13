@@ -248,7 +248,7 @@ pub struct Abuse {
     pub id: u32,
     pub reason: String,
     #[serde(default)]
-    pub predefined_reasons: Vec<AbusePredefinedReasons>,
+    pub predefined_reasons: Vec<AbusePredefinedReason>,
     pub reporter_account: Account,
     pub state: AbuseState,
     pub moderation_comment: String,
@@ -273,8 +273,8 @@ pub struct VideoInfo {
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
-pub enum AbusePredefinedReasons {
+#[serde(rename_all = "kebab-case")]
+pub enum AbusePredefinedReason {
     ViolentOrAbusive,
     HatefulOrAbusive,
     SpamOrMisleading,
@@ -358,6 +358,8 @@ pub(crate) struct Description {
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum NewContent {
+    Abuse(NewAbuse),
+    AbuseMessage(NewAbuseMessage),
     Video(NewVideo),
     #[serde(rename = "videoChannel")]
     Channel(NewChannel),
@@ -366,6 +368,16 @@ pub enum NewContent {
     Playlist(NewPlaylist),
     #[serde(rename = "videoPlaylistElement")]
     PlaylistElement(NewPlaylistElement),
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct NewAbuse {
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct NewAbuseMessage {
+    pub id: u32,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -501,4 +513,14 @@ pub enum Strategy {
     MostViews,
     Trending,
     RecentlyAdded,
+}
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AbuseMessage {
+    pub id: u32,
+    pub message: String,
+    pub by_moderator: bool,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub account: AccountSummary,
 }

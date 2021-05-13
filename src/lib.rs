@@ -107,6 +107,7 @@ impl From<String> for Request<()> {
 
 pub struct Api {
     config: Config,
+    pub abuses: services::Abuses,
     pub accounts: services::Accounts,
     pub channels: services::Channels,
     pub me: services::Me,
@@ -124,6 +125,7 @@ impl Api {
         };
 
         Self {
+            abuses: services::Abuses::new(&config),
             accounts: services::Accounts::new(&config),
             channels: services::Channels::new(&config),
             me: services::Me::new(&config),

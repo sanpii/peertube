@@ -178,17 +178,6 @@ pub enum DisplayNsfw {
 
 #[derive(Debug, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct Abuse {
-    #[serde(flatten)]
-    pub pagination: Pagination,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub state: Option<crate::data::AbuseState>,
-}
-
-#[derive(Debug, Default, serde::Serialize)]
-#[serde(rename_all = "camelCase")]
 pub(crate) struct Avatar {
     pub avatarfile: String,
 }
@@ -505,4 +494,95 @@ pub struct SearchChannels {
 pub enum SearchTarget {
     Local,
     SearchIndex,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Abuses {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<AbuseType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<u32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predefined_reason: Option<crate::data::AbusePredefinedReason>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_reportee: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_reporter: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_video: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_video_channel: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<crate::data::AbuseState>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_is: Option<VideoStatus>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum AbuseType {
+    Video,
+    Comment,
+    Account,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum VideoStatus {
+    Deleted,
+    Blacklisted,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Abuse {
+    pub reason: String,
+    #[serde(flatten)]
+    pub abuse_element: AbuseElement,
+    pub predefined_reasons: Vec<crate::data::AbusePredefinedReason>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum AbuseElement {
+    Account(AbusedAccount),
+    Comment(AbusedComment),
+    Video(AbusedVideo),
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct AbusedAccount {
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Serialize)]
+pub struct AbusedComment {
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AbusedVideo {
+    pub id: u32,
+    pub start_at: u32,
+    pub end_at: u32,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct AbuseSetting {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub moderation_comment: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<crate::data::AbuseState>,
+}
+
+#[derive(Debug, serde::Serialize)]
+pub(crate) struct AbuseMessage {
+    pub message: String,
 }

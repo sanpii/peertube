@@ -1,3 +1,4 @@
+mod abuses;
 mod accounts;
 mod channels;
 mod me;
@@ -7,6 +8,7 @@ mod server;
 mod users;
 mod videos;
 
+pub use abuses::*;
 pub use accounts::*;
 pub use channels::*;
 pub use me::*;

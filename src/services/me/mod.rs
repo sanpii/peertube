@@ -134,7 +134,7 @@ impl Me {
     /**
      * List my abuses.
      */
-    pub async fn abuses(&self, auth: &crate::data::Token, params: &crate::param::Abuse) -> crate::Result<crate::Pager<crate::data::Abuse>> {
+    pub async fn abuses(&self, auth: &crate::data::Token, params: &crate::param::Abuses) -> crate::Result<crate::Pager<crate::data::Abuse>> {
         let request = crate::Request {
             path: "/users/me/abuses".into(),
             params: crate::Params::Query(params),
@@ -237,7 +237,7 @@ mod test {
     async fn abuses() {
         let (api, token) = crate::test::api().await;
 
-        let abuses = api.me.abuses(&token, &crate::param::Abuse::default())
+        let abuses = api.me.abuses(&token, &crate::param::Abuses::default())
             .await;
 
         assert!(dbg!(abuses).is_ok());
