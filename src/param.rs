@@ -467,3 +467,42 @@ pub enum MirrorDirection {
 pub struct Redundancy {
     pub video_id: String,
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SearchVideos {
+    #[serde(flatten)]
+    pub pagination: Videos,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_min: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_max: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub originally_published_end_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub originally_published_start_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub search: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_target: Option<SearchTarget>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+}
+
+#[derive(Debug, Default, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SearchChannels {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    pub search: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_target: Option<SearchTarget>,
+}
+
+#[derive(Debug, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum SearchTarget {
+    Local,
+    SearchIndex,
+}
