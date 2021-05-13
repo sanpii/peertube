@@ -55,9 +55,7 @@ impl Channels {
             auth: Some(auth.clone()),
         };
 
-        crate::Api::put::<crate::data::Empty, _>(&self.config, request)
-            .await?
-            .into()
+        crate::Api::put(&self.config, request).await
     }
 
     /**

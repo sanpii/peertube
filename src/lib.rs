@@ -192,11 +192,13 @@ impl Api {
             .into()
     }
 
-    pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+    pub(crate) async fn put<P: serde::Serialize>(
         config: &Config,
         request: Request<P>,
-    ) -> crate::Result<T> {
-        Self::request(reqwest::Method::PUT, config, request).await
+    ) -> crate::Result<()> {
+        Self::request::<data::Empty, _>(reqwest::Method::PUT, config, request)
+            .await?
+            .into()
     }
 
     async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
