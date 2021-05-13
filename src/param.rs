@@ -647,3 +647,11 @@ pub(crate) struct Plugin {
 pub struct PluginSettings {
     //pub settings: (),
 }
+
+#[derive(Debug, Default, serde::Serialize)]
+pub struct Jobs {
+    #[serde(flatten)]
+    pub pagination: Pagination,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_type: Option<crate::data::JobType>,
+}

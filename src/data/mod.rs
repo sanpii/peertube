@@ -633,3 +633,60 @@ pub struct PublicSettings {
 #[serde(rename_all = "camelCase")]
 pub struct RegisteredSettings {
 }
+
+#[derive(Debug, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Job {
+    pub id: u32,
+    pub state: JobState,
+    pub r#type: JobType,
+    pub data: (),
+    pub error: Option<()>,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub finished_on: chrono::DateTime<chrono::offset::Utc>,
+    pub processed_on: chrono::DateTime<chrono::offset::Utc>,
+}
+
+#[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum JobState {
+    #[serde(rename = "")]
+    All,
+    Active,
+    Completed,
+    Failed,
+    Waiting,
+    Delayed,
+}
+
+impl std::fmt::Display for JobState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            Self::All => "",
+            Self::Active => "active",
+            Self::Completed => "completed",
+            Self::Failed => "failed",
+            Self::Waiting => "waiting",
+            Self::Delayed => "delayed",
+        };
+
+        f.write_str(&s)
+    }
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum JobType {
+    ActivitypubFollow,
+    ActivitypubHttpBroadcast,
+    ActivitypubHttpFetcher,
+    ActivitypubHttpUnicast,
+    Email,
+    VideoTranscoding,
+    VideoFileImport,
+    VideoImport,
+    VideosViews,
+    ActivitypubRefresher,
+    VideoRedundancy,
+    VideoLiveEnding,
+}
