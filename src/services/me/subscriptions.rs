@@ -12,7 +12,11 @@ impl Subscriptions {
     /**
      * Get my user subscriptions.
      */
-    pub async fn all(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Subscription>> {
+    pub async fn all(
+        &self,
+        auth: &crate::data::Token,
+        pagination: &crate::param::Pagination,
+    ) -> crate::Result<crate::Pager<crate::data::Subscription>> {
         let request = crate::Request {
             path: "/users/me/subscriptions".into(),
             params: crate::Params::Query(pagination),
@@ -44,7 +48,11 @@ impl Subscriptions {
     /**
      * Get if subscriptions exist for my user.
      */
-    pub async fn exist<T: ToString>(&self, auth: &crate::data::Token, uris: &[&T]) -> crate::Result<std::collections::HashMap<String, bool>> {
+    pub async fn exist<T: ToString>(
+        &self,
+        auth: &crate::data::Token,
+        uris: &[&T],
+    ) -> crate::Result<std::collections::HashMap<String, bool>> {
         let params: Vec<_> = uris.iter().map(|x| ("uris", x.to_string())).collect();
 
         let request = crate::Request {
@@ -59,7 +67,11 @@ impl Subscriptions {
     /**
      * List videos of subscriptions of my user.
      */
-    pub async fn videos(&self, auth: &crate::data::Token, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
+    pub async fn videos(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Videos,
+    ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: "/users/me/subscriptions/videos".into(),
             params: crate::Params::Query(params),
@@ -72,7 +84,11 @@ impl Subscriptions {
     /**
      * Get subscription of my user.
      */
-    pub async fn get(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<crate::data::Subscription> {
+    pub async fn get(
+        &self,
+        auth: &crate::data::Token,
+        handle: &str,
+    ) -> crate::Result<crate::data::Subscription> {
         let request = crate::Request {
             path: format!("/users/me/subscriptions/{}", handle),
             params: crate::Params::none(),
@@ -104,7 +120,10 @@ mod test {
     async fn all() {
         let (api, token) = crate::test::api().await;
 
-        let subscriptions = api.me.subscriptions.all(&token, &crate::param::Pagination::default())
+        let subscriptions = api
+            .me
+            .subscriptions
+            .all(&token, &crate::param::Pagination::default())
             .await;
 
         assert!(subscriptions.is_ok());
@@ -114,8 +133,7 @@ mod test {
     async fn add() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.me.subscriptions.add(&token, "lqdn@video.lqdn.fr")
-            .await;
+        let status = api.me.subscriptions.add(&token, "lqdn@video.lqdn.fr").await;
 
         assert!(status.is_ok());
     }
@@ -124,7 +142,10 @@ mod test {
     async fn exist() {
         let (api, token) = crate::test::api().await;
 
-        let results = api.me.subscriptions.exist(&token, &[&"lqdn@video.lqdn.fr"])
+        let results = api
+            .me
+            .subscriptions
+            .exist(&token, &[&"lqdn@video.lqdn.fr"])
             .await;
 
         assert_eq!(results.unwrap().get("lqdn@video.lqdn.fr"), Some(&false));
@@ -134,7 +155,10 @@ mod test {
     async fn videos() {
         let (api, token) = crate::test::api().await;
 
-        let videos = api.me.subscriptions.videos(&token, &crate::param::Videos::default())
+        let videos = api
+            .me
+            .subscriptions
+            .videos(&token, &crate::param::Videos::default())
             .await;
 
         assert!(videos.is_ok());
@@ -144,8 +168,7 @@ mod test {
     async fn get() {
         let (api, token) = crate::test::api().await;
 
-        let subscription = api.me.subscriptions.get(&token, "lqdn@video.lqdn.fr")
-            .await;
+        let subscription = api.me.subscriptions.get(&token, "lqdn@video.lqdn.fr").await;
 
         assert!(subscription.is_ok());
     }
@@ -154,7 +177,10 @@ mod test {
     async fn delete() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.me.subscriptions.delete(&token, "lqdn@video.lqdn.fr")
+        let status = api
+            .me
+            .subscriptions
+            .delete(&token, "lqdn@video.lqdn.fr")
             .await;
 
         assert!(status.is_ok());

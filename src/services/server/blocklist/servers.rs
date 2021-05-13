@@ -12,7 +12,11 @@ impl Servers {
     /**
      * List server blocks.
      */
-    pub async fn all(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::BlockedServer>> {
+    pub async fn all(
+        &self,
+        auth: &crate::data::Token,
+        pagination: &crate::param::Pagination,
+    ) -> crate::Result<crate::Pager<crate::data::BlockedServer>> {
         let request = crate::Request {
             path: "/server/blocklist/servers".to_string(),
             params: crate::Params::Query(pagination),
@@ -63,7 +67,11 @@ mod test {
     async fn all() {
         let (api, token) = crate::test::api().await;
 
-        let servers = api.server.blocklist.servers.all(&token, &crate::param::Pagination::default())
+        let servers = api
+            .server
+            .blocklist
+            .servers
+            .all(&token, &crate::param::Pagination::default())
             .await;
 
         assert!(servers.is_ok());
@@ -73,7 +81,11 @@ mod test {
     async fn add() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.server.blocklist.servers.add(&token, "example.org")
+        let status = api
+            .server
+            .blocklist
+            .servers
+            .add(&token, "example.org")
             .await;
 
         assert!(status.is_ok());
@@ -83,7 +95,11 @@ mod test {
     async fn delete() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.server.blocklist.servers.delete(&token, "example.org")
+        let status = api
+            .server
+            .blocklist
+            .servers
+            .delete(&token, "example.org")
             .await;
 
         assert!(status.is_ok());

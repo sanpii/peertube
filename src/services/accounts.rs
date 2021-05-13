@@ -22,7 +22,11 @@ impl Accounts {
     /**
      * List videos of an account.
      */
-    pub async fn videos(&self, name: &str, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
+    pub async fn videos(
+        &self,
+        name: &str,
+        params: &crate::param::Videos,
+    ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: format!("/accounts/{}/videos", name),
             params: crate::Params::Query(params),
@@ -35,7 +39,10 @@ impl Accounts {
     /**
      * List accounts.
      */
-    pub async fn all(&self, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Account>> {
+    pub async fn all(
+        &self,
+        pagination: &crate::param::Pagination,
+    ) -> crate::Result<crate::Pager<crate::data::Account>> {
         let request = crate::Request {
             path: "/accounts".to_string(),
             params: crate::Params::Query(pagination),
@@ -48,7 +55,11 @@ impl Accounts {
     /**
      * List video channels of an account.
      */
-    pub async fn video_channels(&self, name: &str, params: &crate::param::Channels) -> crate::Result<crate::Pager<crate::data::Channel>> {
+    pub async fn video_channels(
+        &self,
+        name: &str,
+        params: &crate::param::Channels,
+    ) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
             path: format!("/accounts/{}/video-channels", name),
             params: crate::Params::Query(params),
@@ -61,7 +72,12 @@ impl Accounts {
     /**
      * List ratings of an account.
      */
-    pub async fn ratings(&self, auth: &crate::data::Token, name: &str, params: &crate::param::Ratings) -> crate::Result<crate::Pager<crate::data::Channel>> {
+    pub async fn ratings(
+        &self,
+        auth: &crate::data::Token,
+        name: &str,
+        params: &crate::param::Ratings,
+    ) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
             path: format!("/accounts/{}/ratings", name),
             params: crate::Params::Query(params),
@@ -77,9 +93,7 @@ mod test {
     #[tokio::test]
     async fn account() {
         let (api, _) = crate::test::api().await;
-        let account = api.accounts.get(&crate::test::username())
-            .await
-            .unwrap();
+        let account = api.accounts.get(&crate::test::username()).await.unwrap();
 
         assert_eq!(account.display_name, crate::test::username());
     }
@@ -87,7 +101,9 @@ mod test {
     #[tokio::test]
     async fn account_videos() {
         let (api, _) = crate::test::api().await;
-        let videos = api.accounts.videos(&crate::test::username(), &crate::param::Videos::default())
+        let videos = api
+            .accounts
+            .videos(&crate::test::username(), &crate::param::Videos::default())
             .await;
 
         assert!(videos.is_ok());
@@ -97,10 +113,14 @@ mod test {
     async fn accounts() {
         let (api, _) = crate::test::api().await;
 
-        let accounts = api.accounts.all(&crate::param::Pagination {
-            count: Some(2),
-            .. Default::default()
-        }).await.unwrap();
+        let accounts = api
+            .accounts
+            .all(&crate::param::Pagination {
+                count: Some(2),
+                ..Default::default()
+            })
+            .await
+            .unwrap();
 
         assert_eq!(accounts.data.len(), 2);
     }
@@ -108,7 +128,9 @@ mod test {
     #[tokio::test]
     async fn account_video_channels() {
         let (api, _) = crate::test::api().await;
-        let channels = api.accounts.video_channels(&crate::test::username(), &crate::param::Channels::default())
+        let channels = api
+            .accounts
+            .video_channels(&crate::test::username(), &crate::param::Channels::default())
             .await;
 
         assert!(channels.is_ok());
@@ -117,7 +139,13 @@ mod test {
     #[tokio::test]
     async fn accountratings() {
         let (api, token) = crate::test::api().await;
-        let ratings = api.accounts.ratings(&token, &crate::test::username(), &crate::param::Ratings::default())
+        let ratings = api
+            .accounts
+            .ratings(
+                &token,
+                &crate::test::username(),
+                &crate::param::Ratings::default(),
+            )
             .await;
 
         assert!(ratings.is_ok());

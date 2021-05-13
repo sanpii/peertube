@@ -47,18 +47,21 @@ impl<S: serde::Serialize> Params<S> {
     }
 
     fn upload(params: S, name: &str, file: &str) -> Result<Self> {
-        let part = reqwest::multipart::Part::bytes(std::fs::read(file)?)
-            .file_name(file.to_string());
+        let part =
+            reqwest::multipart::Part::bytes(std::fs::read(file)?).file_name(file.to_string());
 
-        let form = reqwest::multipart::Form::new()
-            .part(name.to_string(), part);
+        let form = reqwest::multipart::Form::new().part(name.to_string(), part);
 
         Ok(Self::Multipart(params, form))
     }
 }
 
 impl<S: serde::Serialize> Request<S> {
-    fn into_request(self, method: reqwest::Method, base_url: &str) -> crate::Result<reqwest::RequestBuilder> {
+    fn into_request(
+        self,
+        method: reqwest::Method,
+        base_url: &str,
+    ) -> crate::Result<reqwest::RequestBuilder> {
         let url = format!("{}/api/v1{}", base_url, self.path);
         let client = reqwest::Client::new();
         let mut request = client.request(method, &url);
@@ -69,8 +72,10 @@ impl<S: serde::Serialize> Request<S> {
             Params::Form(params) => request.form(&params),
             Params::Multipart(params, mut form) => {
                 match serde_json::to_value(&params)? {
-                    serde_json::Value::Object(map) => for (k, v) in map.iter() {
-                        form = form.text(k.to_string(), v.to_string());
+                    serde_json::Value::Object(map) => {
+                        for (k, v) in map.iter() {
+                            form = form.text(k.to_string(), v.to_string());
+                        }
                     }
                     serde_json::Value::Null => (),
                     _ => unimplemented!(),
@@ -145,7 +150,8 @@ impl Api {
     }
 
     pub async fn auth(&self, username: &str, password: &str) -> crate::Result<data::Token> {
-        let oauth_clients: data::OauthClient = Self::get(&self.conf, "/oauth-clients/local".into()).await?;
+        let oauth_clients: data::OauthClient =
+            Self::get(&self.conf, "/oauth-clients/local".into()).await?;
         let params = param::Auth {
             client_id: oauth_clients.client_id,
             client_secret: oauth_clients.client_secret,
@@ -163,24 +169,41 @@ impl Api {
         Self::post(&self.conf, request).await
     }
 
-    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+    pub(crate) async fn get<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+        config: &Config,
+        request: Request<P>,
+    ) -> crate::Result<T> {
         Self::request(reqwest::Method::GET, config, request).await
     }
 
-    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+    pub(crate) async fn post<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+        config: &Config,
+        request: Request<P>,
+    ) -> crate::Result<T> {
         Self::request(reqwest::Method::POST, config, request).await
     }
 
-    pub(crate) async fn delete<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+    pub(crate) async fn delete<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+        config: &Config,
+        request: Request<P>,
+    ) -> crate::Result<T> {
         Self::request(reqwest::Method::DELETE, config, request).await
     }
 
-    pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(config: &Config, request: Request<P>) -> crate::Result<T> {
+    pub(crate) async fn put<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+        config: &Config,
+        request: Request<P>,
+    ) -> crate::Result<T> {
         Self::request(reqwest::Method::PUT, config, request).await
     }
 
-    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(method: reqwest::Method, config: &Config, request: Request<P>) -> crate::Result<T> {
-        let response = request.into_request(method, &config.base_url)?
+    async fn request<T: for<'de> serde::Deserialize<'de>, P: serde::Serialize>(
+        method: reqwest::Method,
+        config: &Config,
+        request: Request<P>,
+    ) -> crate::Result<T> {
+        let response = request
+            .into_request(method, &config.base_url)?
             .send()
             .await?;
 
@@ -215,9 +238,7 @@ mod test {
         env_logger::try_init().ok();
 
         let api = crate::Api::new(&instance());
-        let token = api.auth(&username(), &password())
-            .await
-            .unwrap();
+        let token = api.auth(&username(), &password()).await.unwrap();
 
         (api, token)
     }
@@ -226,10 +247,9 @@ mod test {
     async fn auth() {
         let (api, _) = crate::test::api().await;
 
-        let auth = api.auth(
-            &crate::test::username(),
-            &crate::test::password(),
-        ).await;
+        let auth = api
+            .auth(&crate::test::username(), &crate::test::password())
+            .await;
 
         assert!(auth.is_ok());
     }

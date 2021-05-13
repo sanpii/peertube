@@ -631,8 +631,7 @@ pub struct PublicSettings {
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct RegisteredSettings {
-}
+pub struct RegisteredSettings {}
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]

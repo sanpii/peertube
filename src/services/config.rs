@@ -26,7 +26,10 @@ impl Config {
     /**
      * Get instance runtime configuration.
      */
-    pub async fn custom(&self, auth: &crate::data::Token) -> crate::Result<crate::data::config::Custom> {
+    pub async fn custom(
+        &self,
+        auth: &crate::data::Token,
+    ) -> crate::Result<crate::data::config::Custom> {
         let request = crate::Request {
             path: "/config/custom".to_string(),
             params: crate::Params::none(),
@@ -39,7 +42,11 @@ impl Config {
     /**
      * Set instance runtime configuration.
      */
-    pub async fn set(&self, _auth: &crate::data::Token, _config: crate::data::config::Custom) -> crate::Result<()> {
+    pub async fn set(
+        &self,
+        _auth: &crate::data::Token,
+        _config: crate::data::config::Custom,
+    ) -> crate::Result<()> {
         todo!()
     }
 

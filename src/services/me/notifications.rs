@@ -12,7 +12,11 @@ impl Notifications {
     /**
      * List my notifications.
      */
-    pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Notification) -> crate::Result<crate::Pager<crate::data::Notification>> {
+    pub async fn all(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Notification,
+    ) -> crate::Result<crate::Pager<crate::data::Notification>> {
         let request = crate::Request {
             path: "/users/me/notifications".into(),
             params: crate::Params::Query(params),
@@ -26,9 +30,7 @@ impl Notifications {
      * Mark notifications as read by their id.
      */
     pub async fn read(&self, auth: &crate::data::Token, ids: &[u32]) -> crate::Result<()> {
-        let params = crate::param::Notifications {
-            ids: ids.to_vec(),
-        };
+        let params = crate::param::Notifications { ids: ids.to_vec() };
 
         let request = crate::Request {
             path: "/users/me/notifications/read".into(),
@@ -59,7 +61,11 @@ impl Notifications {
     /**
      * Update my notification settings.
      */
-    pub async fn settings(&self, auth: &crate::data::Token, settings: &crate::param::NotificationSettings) -> crate::Result<()> {
+    pub async fn settings(
+        &self,
+        auth: &crate::data::Token,
+        settings: &crate::param::NotificationSettings,
+    ) -> crate::Result<()> {
         let request = crate::Request {
             path: "/users/me/notification-settings".into(),
             params: crate::Params::Json(settings),
@@ -78,7 +84,10 @@ mod test {
     async fn all() {
         let (api, token) = crate::test::api().await;
 
-        let notifications = api.me.notifications.all(&token, &crate::param::Notification::default())
+        let notifications = api
+            .me
+            .notifications
+            .all(&token, &crate::param::Notification::default())
             .await;
 
         assert!(notifications.is_ok());
@@ -88,8 +97,7 @@ mod test {
     async fn read() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.me.notifications.read(&token, &[1])
-            .await;
+        let status = api.me.notifications.read(&token, &[1]).await;
 
         assert!(status.is_ok());
     }
@@ -98,8 +106,7 @@ mod test {
     async fn read_all() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.me.notifications.read_all(&token)
-            .await;
+        let status = api.me.notifications.read_all(&token).await;
 
         assert!(status.is_ok());
     }
@@ -124,8 +131,7 @@ mod test {
             video_auto_blacklist_as_moderator: Both,
         };
 
-        let status = api.me.notifications.settings(&token, &settings)
-            .await;
+        let status = api.me.notifications.settings(&token, &settings).await;
 
         assert!(status.is_ok());
     }

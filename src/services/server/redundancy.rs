@@ -12,7 +12,11 @@ impl Redundancy {
     /**
      * List videos being mirrored.
      */
-    pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Redundancies) -> crate::Result<crate::Pager<crate::data::Redundancy>> {
+    pub async fn all(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Redundancies,
+    ) -> crate::Result<crate::Pager<crate::data::Redundancy>> {
         let request = crate::Request {
             path: "/server/redundancy/videos".to_string(),
             params: crate::Params::Query(params),
@@ -59,7 +63,12 @@ impl Redundancy {
     /**
      * Update a server redundancy policy.
      */
-    pub async fn update(&self, auth: &crate::data::Token, host: &str, allowed: bool) -> crate::Result<()> {
+    pub async fn update(
+        &self,
+        auth: &crate::data::Token,
+        host: &str,
+        allowed: bool,
+    ) -> crate::Result<()> {
         let params = crate::param::RedundancySetting {
             redundancy_allowed: allowed,
         };
@@ -86,8 +95,7 @@ mod test {
             pagination: Default::default(),
         };
 
-        let redundancies = api.server.redundancy.all(&token, &params)
-            .await;
+        let redundancies = api.server.redundancy.all(&token, &params).await;
 
         assert!(redundancies.is_ok());
     }
@@ -96,8 +104,7 @@ mod test {
     async fn add() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.server.redundancy.add(&token, "42")
-            .await;
+        let status = api.server.redundancy.add(&token, "42").await;
 
         assert!(status.is_ok());
     }
@@ -106,8 +113,7 @@ mod test {
     async fn delete() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.server.redundancy.delete(&token, "42")
-            .await;
+        let status = api.server.redundancy.delete(&token, "42").await;
 
         assert!(status.is_ok());
     }
@@ -116,7 +122,10 @@ mod test {
     async fn update() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.server.redundancy.update(&token, "example.org", true)
+        let status = api
+            .server
+            .redundancy
+            .update(&token, "example.org", true)
             .await;
 
         assert!(status.is_ok());

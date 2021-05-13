@@ -12,7 +12,11 @@ impl Users {
     /**
      * Create a user.
      */
-    pub async fn create(&self, auth: &crate::data::Token, user: &crate::param::NewUser) -> crate::Result<crate::data::NewUser> {
+    pub async fn create(
+        &self,
+        auth: &crate::data::Token,
+        user: &crate::param::NewUser,
+    ) -> crate::Result<crate::data::NewUser> {
         let request = crate::Request {
             path: "/users".to_string(),
             params: crate::Params::Json(user),
@@ -29,7 +33,11 @@ impl Users {
     /**
      * List users.
      */
-    pub async fn all(&self, auth: &crate::data::Token, params: &crate::param::Users) -> crate::Result<crate::Pager<crate::data::User>> {
+    pub async fn all(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Users,
+    ) -> crate::Result<crate::Pager<crate::data::User>> {
         let request = crate::Request {
             path: "/users".to_string(),
             params: crate::Params::Query(params),
@@ -57,7 +65,11 @@ impl Users {
     /**
      * Get a user.
      */
-    pub async fn get(&self, auth: &crate::data::Token, id: u32) -> crate::Result<crate::data::User> {
+    pub async fn get(
+        &self,
+        auth: &crate::data::Token,
+        id: u32,
+    ) -> crate::Result<crate::data::User> {
         let request = crate::Request {
             path: format!("/users/{}", id),
             params: crate::Params::none(),
@@ -70,7 +82,12 @@ impl Users {
     /**
      * Update a user.
      */
-    pub async fn update(&self, auth: &crate::data::Token, id: u32, params: &crate::param::User) -> crate::Result<()> {
+    pub async fn update(
+        &self,
+        auth: &crate::data::Token,
+        id: u32,
+        params: &crate::param::User,
+    ) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/users/{}", id),
             params: crate::Params::Json(params),
@@ -108,10 +125,9 @@ mod test {
             password: "123456".to_string(),
             username: "test".to_string(),
 
-            .. Default::default()
+            ..Default::default()
         };
-        let user = api.users.create(&token, &param)
-            .await;
+        let user = api.users.create(&token, &param).await;
 
         assert!(user.is_ok());
     }
@@ -120,8 +136,7 @@ mod test {
     async fn all() {
         let (api, token) = crate::test::api().await;
 
-        let users = api.users.all(&token, &crate::param::Users::default())
-            .await;
+        let users = api.users.all(&token, &crate::param::Users::default()).await;
 
         assert!(users.is_ok());
     }
@@ -130,8 +145,7 @@ mod test {
     async fn delete() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.users.delete(&token, 999)
-            .await;
+        let status = api.users.delete(&token, 999).await;
 
         assert!(status.is_ok());
     }
@@ -140,8 +154,7 @@ mod test {
     async fn get() {
         let (api, token) = crate::test::api().await;
 
-        let user = api.users.get(&token, 1)
-            .await;
+        let user = api.users.get(&token, 1).await;
 
         assert!(user.is_ok());
     }
@@ -153,10 +166,9 @@ mod test {
             id: 1,
             video_quota_daily: Some(100),
 
-            .. Default::default()
+            ..Default::default()
         };
-        let user = api.users.update(&token, 1, &param)
-            .await;
+        let user = api.users.update(&token, 1, &param).await;
 
         assert!(user.is_ok());
     }
@@ -169,10 +181,9 @@ mod test {
             password: "123456".to_string(),
             username: "test".to_string(),
 
-            .. Default::default()
+            ..Default::default()
         };
-        let user = api.users.register(&param)
-            .await;
+        let user = api.users.register(&param).await;
 
         assert!(user.is_ok());
     }

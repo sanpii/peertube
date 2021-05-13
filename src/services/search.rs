@@ -12,7 +12,10 @@ impl Search {
     /**
      * Search videos.
      */
-    pub async fn videos(&self, params: &crate::param::SearchVideos) -> crate::Result<crate::Pager<crate::data::Video>> {
+    pub async fn videos(
+        &self,
+        params: &crate::param::SearchVideos,
+    ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: "/search/videos".to_string(),
             params: crate::Params::Query(params),
@@ -25,7 +28,10 @@ impl Search {
     /**
      * Search channels.
      */
-    pub async fn channels(&self, params: &crate::param::SearchChannels) -> crate::Result<crate::Pager<crate::data::Channel>> {
+    pub async fn channels(
+        &self,
+        params: &crate::param::SearchChannels,
+    ) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
             path: "/search/video-channels".to_string(),
             params: crate::Params::Query(params),
@@ -44,11 +50,10 @@ mod test {
         let params = crate::param::SearchVideos {
             search: "clément".to_string(),
 
-            .. Default::default()
+            ..Default::default()
         };
 
-        let videos = api.search.videos(&params)
-            .await;
+        let videos = api.search.videos(&params).await;
 
         assert!(videos.is_ok());
     }
@@ -59,11 +64,10 @@ mod test {
         let params = crate::param::SearchChannels {
             search: "clément".to_string(),
 
-            .. Default::default()
+            ..Default::default()
         };
 
-        let channels = api.search.channels(&params)
-            .await;
+        let channels = api.search.channels(&params).await;
 
         assert!(channels.is_ok());
     }

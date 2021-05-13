@@ -19,7 +19,11 @@ impl Channels {
     /**
      * Create a video channel.
      */
-    pub async fn create(&self, auth: &crate::data::Token, params: &crate::param::Channel) -> crate::Result<crate::data::NewContent> {
+    pub async fn create(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Channel,
+    ) -> crate::Result<crate::data::NewContent> {
         let request = crate::Request {
             path: "/video-channels".to_string(),
             params: crate::Params::Json(params),
@@ -39,7 +43,12 @@ impl Channels {
     /**
      * Update a video channel.
      */
-    pub async fn update(&self, auth: &crate::data::Token, handle: &str, params: &crate::param::ChannelSetting) -> crate::Result<()> {
+    pub async fn update(
+        &self,
+        auth: &crate::data::Token,
+        handle: &str,
+        params: &crate::param::ChannelSetting,
+    ) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/video-channels/{}", handle),
             params: crate::Params::Json(params),
@@ -69,7 +78,11 @@ impl Channels {
     /**
      * List videos of a video channel.
      */
-    pub async fn videos(&self, handle: &str, params: &crate::param::Videos) -> crate::Result<crate::Pager<crate::data::Video>> {
+    pub async fn videos(
+        &self,
+        handle: &str,
+        params: &crate::param::Videos,
+    ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: format!("/video-channels/{}/videos", handle),
             params: crate::Params::Query(params),
@@ -82,7 +95,12 @@ impl Channels {
     /**
      * Update channel avatar.
      */
-    pub async fn update_avatar(&self, auth: &crate::data::Token, handle: &str, avatarfile: &str) -> crate::Result<()> {
+    pub async fn update_avatar(
+        &self,
+        auth: &crate::data::Token,
+        handle: &str,
+        avatarfile: &str,
+    ) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/video-channels/{}/avatar/pick", handle),
             params: crate::Params::upload((), "avatarfile", avatarfile)?,
@@ -97,7 +115,11 @@ impl Channels {
     /**
      * Delete channel avatar.
      */
-    pub async fn delete_avatar(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
+    pub async fn delete_avatar(
+        &self,
+        auth: &crate::data::Token,
+        handle: &str,
+    ) -> crate::Result<()> {
         let request = crate::Request {
             path: format!("/video-channels/{}/avatar", handle),
             params: crate::Params::none(),
@@ -116,8 +138,7 @@ mod test {
     async fn all() {
         let (api, _) = crate::test::api().await;
 
-        let channels = api.channels.all()
-            .await;
+        let channels = api.channels.all().await;
 
         assert!(channels.is_ok());
     }
@@ -129,11 +150,10 @@ mod test {
             display_name: "New channel".to_string(),
             name: "new-channel".to_string(),
 
-            .. Default::default()
+            ..Default::default()
         };
 
-        let status = api.channels.create(&token, &params)
-            .await;
+        let status = api.channels.create(&token, &params).await;
 
         assert!(status.is_ok());
     }
@@ -142,8 +162,7 @@ mod test {
     async fn get() {
         let (api, _) = crate::test::api().await;
 
-        let channel = api.channels.get("edl@tube.homecomputing.fr")
-            .await;
+        let channel = api.channels.get("edl@tube.homecomputing.fr").await;
 
         assert!(channel.is_ok());
     }
@@ -154,11 +173,10 @@ mod test {
         let params = crate::param::ChannelSetting {
             display_name: Some("New channel name".to_string()),
 
-            .. Default::default()
+            ..Default::default()
         };
 
-        let status = api.channels.update(&token, "new-channel", &params)
-            .await;
+        let status = api.channels.update(&token, "new-channel", &params).await;
 
         assert!(status.is_ok());
     }
@@ -167,8 +185,7 @@ mod test {
     async fn delete() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.channels.delete(&token, "new-channel")
-            .await;
+        let status = api.channels.delete(&token, "new-channel").await;
 
         assert!(status.is_ok());
     }
@@ -177,7 +194,12 @@ mod test {
     async fn videos() {
         let (api, _) = crate::test::api().await;
 
-        let channel = api.channels.videos("58edd166-dab0-4a1e-86e3-85778b78ba77", &crate::param::Videos::default())
+        let channel = api
+            .channels
+            .videos(
+                "58edd166-dab0-4a1e-86e3-85778b78ba77",
+                &crate::param::Videos::default(),
+            )
             .await;
 
         assert!(channel.is_ok());
@@ -187,7 +209,13 @@ mod test {
     async fn update_avatar() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.channels.update_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77", "fixtures/avatar.png")
+        let status = api
+            .channels
+            .update_avatar(
+                &token,
+                "58edd166-dab0-4a1e-86e3-85778b78ba77",
+                "fixtures/avatar.png",
+            )
             .await;
 
         assert!(status.is_ok());
@@ -197,7 +225,9 @@ mod test {
     async fn delete_avatar() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.channels.delete_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77")
+        let status = api
+            .channels
+            .delete_avatar(&token, "58edd166-dab0-4a1e-86e3-85778b78ba77")
             .await;
 
         assert!(status.is_ok());

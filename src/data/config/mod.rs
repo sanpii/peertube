@@ -218,7 +218,7 @@ pub struct Size {
 #[derive(Debug, serde::Deserialize)]
 pub struct Video {
     pub image: File,
-    pub file: File
+    pub file: File,
 }
 
 #[derive(Debug, serde::Deserialize)]

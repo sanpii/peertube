@@ -39,7 +39,11 @@ impl Me {
     /**
      * Update my user information.
      */
-    pub async fn update(&self, auth: &crate::data::Token, params: &crate::param::Me) -> crate::Result<()> {
+    pub async fn update(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Me,
+    ) -> crate::Result<()> {
         let request = crate::Request {
             path: "/users/me".into(),
             params: crate::Params::Json(params),
@@ -54,7 +58,11 @@ impl Me {
     /**
      * Get video imports of my user.
      */
-    pub async fn imports(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Import>> {
+    pub async fn imports(
+        &self,
+        auth: &crate::data::Token,
+        pagination: &crate::param::Pagination,
+    ) -> crate::Result<crate::Pager<crate::data::Import>> {
         let request = crate::Request {
             path: "/users/me/videos/imports".into(),
             params: crate::Params::Query(pagination),
@@ -80,7 +88,11 @@ impl Me {
     /**
      * Get rate of my user for a video.
      */
-    pub async fn video_rating(&self, auth: &crate::data::Token, id: &str) -> crate::Result<crate::data::Rating> {
+    pub async fn video_rating(
+        &self,
+        auth: &crate::data::Token,
+        id: &str,
+    ) -> crate::Result<crate::data::Rating> {
         let request = crate::Request {
             path: format!("/users/me/videos/{}/rating", id),
             params: crate::Params::none(),
@@ -93,7 +105,11 @@ impl Me {
     /**
      * Get videos of my user.
      */
-    pub async fn videos(&self, auth: &crate::data::Token, pagination: &crate::param::Pagination) -> crate::Result<crate::Pager<crate::data::Video>> {
+    pub async fn videos(
+        &self,
+        auth: &crate::data::Token,
+        pagination: &crate::param::Pagination,
+    ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
             path: "/users/me/videos".into(),
             params: crate::Params::Query(pagination),
@@ -106,7 +122,11 @@ impl Me {
     /**
      * Update my user avatar.
      */
-    pub async fn update_avatar(&self, auth: &crate::data::Token, avatarfile: &str) -> crate::Result<crate::data::Avatar> {
+    pub async fn update_avatar(
+        &self,
+        auth: &crate::data::Token,
+        avatarfile: &str,
+    ) -> crate::Result<crate::data::Avatar> {
         let request = crate::Request {
             path: "/users/me/avatar/pick".into(),
             params: crate::Params::upload((), "avatarfile", avatarfile)?,
@@ -134,7 +154,11 @@ impl Me {
     /**
      * List my abuses.
      */
-    pub async fn abuses(&self, auth: &crate::data::Token, params: &crate::param::Abuses) -> crate::Result<crate::Pager<crate::data::Abuse>> {
+    pub async fn abuses(
+        &self,
+        auth: &crate::data::Token,
+        params: &crate::param::Abuses,
+    ) -> crate::Result<crate::Pager<crate::data::Abuse>> {
         let request = crate::Request {
             path: "/users/me/abuses".into(),
             params: crate::Params::Query(params),
@@ -151,8 +175,7 @@ mod test {
     async fn info() {
         let (api, token) = crate::test::api().await;
 
-        let info = api.me.info(&token)
-            .await;
+        let info = api.me.info(&token).await;
 
         assert!(info.is_ok());
     }
@@ -167,8 +190,7 @@ mod test {
             password: "123456".to_string(),
         };
 
-        let status = api.me.update(&token, &param)
-            .await;
+        let status = api.me.update(&token, &param).await;
 
         assert!(status.is_ok());
     }
@@ -177,7 +199,9 @@ mod test {
     async fn imports() {
         let (api, token) = crate::test::api().await;
 
-        let imports = api.me.imports(&token, &crate::param::Pagination::default())
+        let imports = api
+            .me
+            .imports(&token, &crate::param::Pagination::default())
             .await;
 
         assert!(imports.is_ok());
@@ -187,8 +211,7 @@ mod test {
     async fn quota() {
         let (api, token) = crate::test::api().await;
 
-        let quota = api.me.quota(&token)
-            .await;
+        let quota = api.me.quota(&token).await;
 
         assert!(quota.is_ok());
     }
@@ -197,7 +220,9 @@ mod test {
     async fn video_rating() {
         let (api, token) = crate::test::api().await;
 
-        let rating = api.me.video_rating(&token, "a83e96ce-0709-4b48-80e3-1462c88d9cc8")
+        let rating = api
+            .me
+            .video_rating(&token, "a83e96ce-0709-4b48-80e3-1462c88d9cc8")
             .await;
 
         assert!(rating.is_ok());
@@ -207,7 +232,9 @@ mod test {
     async fn videos() {
         let (api, token) = crate::test::api().await;
 
-        let videos = api.me.videos(&token, &crate::param::Pagination::default())
+        let videos = api
+            .me
+            .videos(&token, &crate::param::Pagination::default())
             .await;
 
         assert!(videos.is_ok());
@@ -217,8 +244,7 @@ mod test {
     async fn update_avatar() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.me.update_avatar(&token, "")
-            .await;
+        let status = api.me.update_avatar(&token, "").await;
 
         assert!(status.is_ok());
     }
@@ -227,8 +253,7 @@ mod test {
     async fn delete_avatar() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.me.delete_avatar(&token)
-            .await;
+        let status = api.me.delete_avatar(&token).await;
 
         assert!(status.is_ok());
     }
@@ -237,7 +262,9 @@ mod test {
     async fn abuses() {
         let (api, token) = crate::test::api().await;
 
-        let abuses = api.me.abuses(&token, &crate::param::Abuses::default())
+        let abuses = api
+            .me
+            .abuses(&token, &crate::param::Abuses::default())
             .await;
 
         assert!(dbg!(abuses).is_ok());
