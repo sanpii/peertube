@@ -286,8 +286,9 @@ pub(crate) struct Watching {
 #[derive(Debug, Default, serde::Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct NewVideo {
-    pub channel_id: String,
-    pub name: String,
+    pub channel_id: u32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub category: Option<u32>,
     #[serde(skip_serializing_if = "Option::is_none")]
