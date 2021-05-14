@@ -391,6 +391,11 @@ pub struct NewVideo {
 }
 
 #[derive(Debug, serde::Deserialize)]
+pub struct NewImport {
+    pub id: u32,
+}
+
+#[derive(Debug, serde::Deserialize)]
 pub struct NewChannel {
     pub id: u32,
 }

@@ -176,7 +176,7 @@ impl Videos {
         &self,
         auth: &crate::data::Token,
         params: &crate::param::Import,
-    ) -> crate::Result<crate::data::NewContent> {
+    ) -> crate::Result<crate::data::NewImport> {
         let request = crate::Request {
             path: "/videos/imports".to_string(),
             params: crate::Params::Json(params),
