@@ -193,15 +193,19 @@ pub struct User {
     pub blocked_reason: Option<String>,
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub account: Account,
-    pub video_channels: Vec<Channel>,
+    pub video_channels: Vec<ChannelSummary>,
 }
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Channel {
-    pub description: Option<String>,
     pub display_name: String,
+    pub description: Option<String>,
+    pub support: String,
+    pub id: u32,
     pub is_local: bool,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub owner_account: AccountId,
 }
 
 #[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
