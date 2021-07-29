@@ -678,7 +678,7 @@ impl std::fmt::Display for JobState {
             Self::Delayed => "delayed",
         };
 
-        f.write_str(&s)
+        f.write_str(s)
     }
 }
 
