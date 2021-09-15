@@ -27,11 +27,11 @@ async fn main() -> peertube::Result {
             channel_id: channel.id,
             privacy: Some(peertube::param::Privacy::Public),
 
-            .. Default::default()
+            ..Default::default()
         },
         target_url: Some(opt.url),
 
-        .. Default::default()
+        ..Default::default()
     };
 
     peertube.videos.import(&auth, &import).await?;
