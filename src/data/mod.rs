@@ -201,7 +201,7 @@ pub struct User {
 pub struct Channel {
     pub display_name: String,
     pub description: Option<String>,
-    pub support: String,
+    pub support: Option<String>,
     pub id: u32,
     pub is_local: bool,
     pub updated_at: chrono::DateTime<chrono::offset::Utc>,
