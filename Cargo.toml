@@ -2,7 +2,7 @@
 name = "peertube"
 version = "0.1.1"
 authors = ["Sanpi <sanpi@homecomputing.fr>"]
-edition = "2018"
+edition = "2021"
 description = "Peertube API client"
 license = "MIT"
 repository = "https://github.com/sanpii/peertube"
