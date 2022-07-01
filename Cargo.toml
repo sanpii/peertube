@@ -8,6 +8,7 @@ license = "MIT"
 repository = "https://github.com/sanpii/peertube"
 categories = ["web-programming::http-client"]
 keywords = ["peertube"]
+rust-version = "1.62.0"
 
 [dependencies]
 serde_json = "1.0"

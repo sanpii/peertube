@@ -208,18 +208,13 @@ pub struct Channel {
     pub owner_account: AccountId,
 }
 
-#[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
+#[derive(Debug, Default, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
 #[repr(u8)]
 pub enum Role {
     Admin = 0,
     Moderator = 1,
+    #[default]
     User = 2,
-}
-
-impl Default for Role {
-    fn default() -> Self {
-        Self::User
-    }
 }
 
 #[derive(Debug, serde::Deserialize)]

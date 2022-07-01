@@ -92,17 +92,12 @@ pub struct NewUser {
     pub channel_name: Option<String>,
 }
 
-#[derive(Debug, serde_repr::Serialize_repr)]
+#[derive(Debug, Default, serde_repr::Serialize_repr)]
 #[repr(u8)]
 pub enum AdminFlag {
+    #[default]
     None = 0,
     BypassVideoBlacklist = 1,
-}
-
-impl Default for AdminFlag {
-    fn default() -> Self {
-        Self::None
-    }
 }
 
 #[derive(Debug, Default, serde::Serialize)]
