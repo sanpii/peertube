@@ -1,14 +1,14 @@
-use clap::Clap;
+use clap::Parser;
 
-#[derive(Clap)]
+#[derive(Parser)]
 struct Opt {
-    #[clap(long)]
+    #[arg(long)]
     instance: String,
-    #[clap(long)]
+    #[arg(long)]
     username: String,
-    #[clap(long)]
+    #[arg(long)]
     password: String,
-    #[clap(long)]
+    #[arg(long)]
     channel: String,
     url: String,
 }
