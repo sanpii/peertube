@@ -64,7 +64,7 @@ impl<S: serde::Serialize> Request<S> {
     ) -> crate::Result<reqwest::RequestBuilder> {
         let url = format!("{}/api/v1{}", base_url, self.path);
         let client = reqwest::Client::new();
-        let mut request = client.request(method, &url);
+        let mut request = client.request(method, url);
 
         request = match self.params {
             Params::Query(params) => request.query(&params),
@@ -87,7 +87,7 @@ impl<S: serde::Serialize> Request<S> {
         };
 
         if let Some(auth) = self.auth {
-            request = request.bearer_auth(&auth.access_token);
+            request = request.bearer_auth(auth.access_token);
         }
 
         Ok(request)
