@@ -98,7 +98,7 @@ mod test {
     async fn add() {
         let (api, token) = crate::test::api().await;
 
-        let status = api.server.redundancy.add(&token, "42").await;
+        let status = api.server.redundancy.add(&token, 42).await;
 
         assert!(status.is_ok());
     }

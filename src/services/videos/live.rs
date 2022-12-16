@@ -70,7 +70,7 @@ mod test {
         let params = crate::param::Live {
             video: crate::param::NewVideo {
                 channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
-                name: "test".to_string(),
+                name: Some("test".to_string()),
 
                 ..Default::default()
             },

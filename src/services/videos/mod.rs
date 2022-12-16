@@ -381,7 +381,7 @@ mod test {
         let (api, token) = crate::test::api().await;
         let params = crate::param::NewVideo {
             channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
-            name: "test".to_string(),
+            name: Some("test".to_string()),
 
             ..Default::default()
         };
@@ -400,7 +400,7 @@ mod test {
         let params = crate::param::Import {
             video: crate::param::NewVideo {
                 channel_id: "58edd166-dab0-4a1e-86e3-85778b78ba77".to_string(),
-                name: "test".to_string(),
+                name: Some("test".to_string()),
 
                 ..Default::default()
             },
