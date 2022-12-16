@@ -112,6 +112,7 @@ impl Videos {
     /**
      * Get complete video description.
      */
+    #[cfg_attr(feature = "v5", deprecated)]
     pub async fn description(&self, id: &str) -> crate::Result<String> {
         let description: crate::data::Description =
             crate::Api::get(&self.config, format!("/videos/{id}/description").into()).await?;

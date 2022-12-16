@@ -62,6 +62,8 @@ pub struct Video {
     pub category: Category,
     pub channel: ChannelSummary,
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    #[cfg(feature = "v5")]
+    pub truncatedDescription: Option<String>,
     pub description: Option<String>,
     pub dislikes: u32,
     pub duration: u32,
@@ -183,8 +185,12 @@ pub struct User {
     pub nsfw_policy: String,
     pub web_torrent_enabled: bool,
     pub auto_play_video: bool,
-    pub role: Role,
+    #[cfg(not(feature = "v5"))]
+    pub role: RoleId,
+    #[cfg(not(feature = "v5"))]
     pub role_label: String,
+    #[cfg(feature = "v5")]
+    pub role: Role,
     pub video_quota: i64,
     pub video_quota_daily: i64,
     pub no_instance_config_warning_modal: bool,
@@ -194,6 +200,12 @@ pub struct User {
     pub created_at: chrono::DateTime<chrono::offset::Utc>,
     pub account: Account,
     pub video_channels: Vec<ChannelSummary>,
+}
+
+#[derive(Debug, serde::Deserialize)]
+pub struct Role {
+    pub id: RoleId,
+    pub label: String,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -210,7 +222,7 @@ pub struct Channel {
 
 #[derive(Debug, Default, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
 #[repr(u8)]
-pub enum Role {
+pub enum RoleId {
     Admin = 0,
     Moderator = 1,
     #[default]

@@ -83,7 +83,7 @@ pub(crate) struct Auth {
 pub struct NewUser {
     pub email: String,
     pub password: String,
-    pub role: crate::data::Role,
+    pub role: crate::data::RoleId,
     pub username: String,
     pub video_quota: i32,
     pub video_quota_daily: i32,
@@ -123,7 +123,7 @@ pub struct User {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub plugin_auth: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub role: Option<crate::data::Role>,
+    pub role: Option<crate::data::RoleId>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_quota: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
