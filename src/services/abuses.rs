@@ -53,7 +53,7 @@ impl Abuses {
         params: &crate::param::AbuseSetting,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/abuses/{}", id),
+            path: format!("/abuses/{id}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -66,7 +66,7 @@ impl Abuses {
      */
     pub async fn delete(&self, auth: &crate::data::Token, id: u32) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/abuses/{}", id),
+            path: format!("/abuses/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -83,7 +83,7 @@ impl Abuses {
         id: u32,
     ) -> crate::Result<crate::Pager<crate::data::AbuseMessage>> {
         let request = crate::Request {
-            path: format!("/abuses/{}/messages", id),
+            path: format!("/abuses/{id}/messages"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -105,7 +105,7 @@ impl Abuses {
         };
 
         let request = crate::Request {
-            path: format!("/abuses/{}/messages", id),
+            path: format!("/abuses/{id}/messages"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -123,7 +123,7 @@ impl Abuses {
         message_id: u32,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/abuses/{}/messages/{}", id, message_id),
+            path: format!("/abuses/{id}/messages/{message_id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

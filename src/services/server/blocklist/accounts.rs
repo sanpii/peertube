@@ -50,7 +50,7 @@ impl Accounts {
      */
     pub async fn delete(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/server/blocklist/accounts/{}", handle),
+            path: format!("/server/blocklist/accounts/{handle}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

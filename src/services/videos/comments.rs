@@ -18,7 +18,7 @@ impl Comments {
         pagination: &crate::param::Pagination,
     ) -> crate::Result<crate::Pager<crate::data::Comment>> {
         let request = crate::Request {
-            path: format!("/videos/{}/comment-threads", video_id),
+            path: format!("/videos/{video_id}/comment-threads"),
             params: crate::Params::Query(pagination),
             auth: None,
         };
@@ -36,7 +36,7 @@ impl Comments {
         text: &str,
     ) -> crate::Result<crate::data::Comment> {
         let request = crate::Request {
-            path: format!("/videos/{}/comment-threads", video_id),
+            path: format!("/videos/{video_id}/comment-threads"),
             params: crate::Params::Json(crate::param::Comment {
                 text: text.to_string(),
             }),
@@ -51,7 +51,7 @@ impl Comments {
      */
     pub async fn get(&self, video_id: &str, thread_id: u32) -> crate::Result<crate::data::Thread> {
         let request = crate::Request {
-            path: format!("/videos/{}/comment-threads/{}", video_id, thread_id),
+            path: format!("/videos/{video_id}/comment-threads/{thread_id}"),
             params: crate::Params::none(),
             auth: None,
         };
@@ -74,7 +74,7 @@ impl Comments {
         };
 
         let request = crate::Request {
-            path: format!("/videos/{}/comments/{}", video_id, comment_id),
+            path: format!("/videos/{video_id}/comments/{comment_id}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -95,7 +95,7 @@ impl Comments {
         comment_id: u32,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}/comments/{}", video_id, comment_id),
+            path: format!("/videos/{video_id}/comments/{comment_id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

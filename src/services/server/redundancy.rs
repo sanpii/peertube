@@ -48,7 +48,7 @@ impl Redundancy {
      */
     pub async fn delete(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/server/redundancy/videos/{}", id),
+            path: format!("/server/redundancy/videos/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -70,7 +70,7 @@ impl Redundancy {
         };
 
         let request = crate::Request {
-            path: format!("/server/redundancy/{}", host),
+            path: format!("/server/redundancy/{host}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };

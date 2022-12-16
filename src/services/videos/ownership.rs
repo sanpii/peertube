@@ -30,7 +30,7 @@ impl Ownership {
      */
     pub async fn accept(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/ownership/{}/accept", id),
+            path: format!("/videos/ownership/{id}/accept"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -43,7 +43,7 @@ impl Ownership {
      */
     pub async fn refuse(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/ownership/{}/refuse", id),
+            path: format!("/videos/ownership/{id}/refuse"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -65,7 +65,7 @@ impl Ownership {
         };
 
         let request = crate::Request {
-            path: format!("/videos/{}/give-ownership", video_id),
+            path: format!("/videos/{video_id}/give-ownership"),
             params: crate::Params::Form(params),
             auth: Some(auth.clone()),
         };

@@ -16,7 +16,7 @@ impl Accounts {
      * Get an account.
      */
     pub async fn get(&self, name: &str) -> crate::Result<crate::data::Account> {
-        crate::Api::get(&self.config, format!("/accounts/{}", name).into()).await
+        crate::Api::get(&self.config, format!("/accounts/{name}").into()).await
     }
 
     /**
@@ -28,7 +28,7 @@ impl Accounts {
         params: &crate::param::Videos,
     ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
-            path: format!("/accounts/{}/videos", name),
+            path: format!("/accounts/{name}/videos"),
             params: crate::Params::Query(params),
             auth: None,
         };
@@ -61,7 +61,7 @@ impl Accounts {
         params: &crate::param::Channels,
     ) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
-            path: format!("/accounts/{}/video-channels", name),
+            path: format!("/accounts/{name}/video-channels"),
             params: crate::Params::Query(params),
             auth: None,
         };
@@ -79,7 +79,7 @@ impl Accounts {
         params: &crate::param::Ratings,
     ) -> crate::Result<crate::Pager<crate::data::Channel>> {
         let request = crate::Request {
-            path: format!("/accounts/{}/ratings", name),
+            path: format!("/accounts/{name}/ratings"),
             params: crate::Params::Query(params),
             auth: Some(auth.clone()),
         };

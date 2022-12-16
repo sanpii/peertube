@@ -52,7 +52,7 @@ impl Users {
      */
     pub async fn delete(&self, auth: &crate::data::Token, id: u32) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/users/{}", id),
+            path: format!("/users/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -69,7 +69,7 @@ impl Users {
         id: u32,
     ) -> crate::Result<crate::data::User> {
         let request = crate::Request {
-            path: format!("/users/{}", id),
+            path: format!("/users/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -87,7 +87,7 @@ impl Users {
         params: &crate::param::User,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/users/{}", id),
+            path: format!("/users/{id}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };

@@ -19,7 +19,7 @@ impl Jobs {
         pagination: &crate::param::Pagination,
     ) -> crate::Result<crate::Pager<crate::data::Job>> {
         let request = crate::Request {
-            path: format!("/jobs/{}", state),
+            path: format!("/jobs/{state}"),
             params: crate::Params::Query(pagination),
             auth: Some(auth.clone()),
         };

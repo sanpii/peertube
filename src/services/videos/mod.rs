@@ -81,7 +81,7 @@ impl Videos {
         params: &crate::param::Video,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}", id),
+            path: format!("/videos/{id}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -93,7 +93,7 @@ impl Videos {
      * Get a video.
      */
     pub async fn get(&self, id: &str) -> crate::Result<crate::data::Video> {
-        crate::Api::get(&self.config, format!("/videos/{}", id).into()).await
+        crate::Api::get(&self.config, format!("/videos/{id}").into()).await
     }
 
     /**
@@ -101,7 +101,7 @@ impl Videos {
      */
     pub async fn delete(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}", id),
+            path: format!("/videos/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -114,7 +114,7 @@ impl Videos {
      */
     pub async fn description(&self, id: &str) -> crate::Result<String> {
         let description: crate::data::Description =
-            crate::Api::get(&self.config, format!("/videos/{}/description", id).into()).await?;
+            crate::Api::get(&self.config, format!("/videos/{id}/description").into()).await?;
 
         Ok(description.description)
     }
@@ -125,7 +125,7 @@ impl Videos {
     pub async fn add_view(&self, id: &str) -> crate::Result<()> {
         crate::Api::post::<crate::data::Empty, _>(
             &self.config,
-            format!("/videos/{}/views", id).into(),
+            format!("/videos/{id}/views").into(),
         )
         .await?
         .into()
@@ -143,7 +143,7 @@ impl Videos {
         let params = crate::param::Watching { current_time };
 
         let request = crate::Request {
-            path: format!("/videos/{}/watching", id),
+            path: format!("/videos/{id}/watching"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -202,7 +202,7 @@ impl Videos {
         };
 
         let request = crate::Request {
-            path: format!("/videos/{}/rate", id),
+            path: format!("/videos/{id}/rate"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -215,7 +215,7 @@ impl Videos {
      */
     pub async fn block(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}/blacklist", id),
+            path: format!("/videos/{id}/blacklist"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -230,7 +230,7 @@ impl Videos {
      */
     pub async fn unblock(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}/blacklist", id),
+            path: format!("/videos/{id}/blacklist"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

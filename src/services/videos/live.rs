@@ -35,7 +35,7 @@ impl Live {
         id: &str,
     ) -> crate::Result<crate::data::Live> {
         let request = crate::Request {
-            path: format!("/videos/live/{}", id),
+            path: format!("/videos/live/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -53,7 +53,7 @@ impl Live {
         params: &crate::param::LiveSetting,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/live/{}", id),
+            path: format!("/videos/live/{id}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };

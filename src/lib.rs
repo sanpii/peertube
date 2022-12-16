@@ -62,7 +62,7 @@ impl<S: serde::Serialize> Request<S> {
         method: reqwest::Method,
         base_url: &str,
     ) -> crate::Result<reqwest::RequestBuilder> {
-        let url = format!("{}/api/v1{}", base_url, self.path);
+        let url = format!("{base_url}/api/v1{}", self.path);
         let client = reqwest::Client::new();
         let mut request = client.request(method, url);
 

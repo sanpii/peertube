@@ -75,7 +75,7 @@ impl Plugins {
         };
 
         let request = crate::Request {
-            path: format!("/plugins/{}", action),
+            path: format!("/plugins/{action}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -94,7 +94,7 @@ impl Plugins {
         npm_name: &str,
     ) -> crate::Result<crate::data::Plugin> {
         let request = crate::Request {
-            path: format!("/plugins/{}", npm_name),
+            path: format!("/plugins/{npm_name}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -112,7 +112,7 @@ impl Plugins {
         settings: crate::param::PluginSettings,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/plugins/{}/settings", npm_name),
+            path: format!("/plugins/{npm_name}/settings"),
             params: crate::Params::Json(settings),
             auth: Some(auth.clone()),
         };
@@ -129,7 +129,7 @@ impl Plugins {
     ) -> crate::Result<crate::data::PublicSettings> {
         crate::Api::get(
             &self.config,
-            format!("/plugins/{}/public-settings", npm_name).into(),
+            format!("/plugins/{npm_name}/public-settings").into(),
         )
         .await
     }
@@ -143,7 +143,7 @@ impl Plugins {
         npm_name: &str,
     ) -> crate::Result<crate::data::RegisteredSettings> {
         let request = crate::Request {
-            path: format!("/plugins/{}/registered-settings", npm_name),
+            path: format!("/plugins/{npm_name}/registered-settings"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

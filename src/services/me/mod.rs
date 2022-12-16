@@ -92,7 +92,7 @@ impl Me {
         id: &str,
     ) -> crate::Result<crate::data::Rating> {
         let request = crate::Request {
-            path: format!("/users/me/videos/{}/rating", id),
+            path: format!("/users/me/videos/{id}/rating"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

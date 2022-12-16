@@ -37,7 +37,7 @@ impl Channels {
      * Get a video channel.
      */
     pub async fn get(&self, handle: &str) -> crate::Result<crate::data::Channel> {
-        crate::Api::get(&self.config, format!("/video-channels/{}", handle).into()).await
+        crate::Api::get(&self.config, format!("/video-channels/{handle}").into()).await
     }
 
     /**
@@ -50,7 +50,7 @@ impl Channels {
         params: &crate::param::ChannelSetting,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-channels/{}", handle),
+            path: format!("/video-channels/{handle}"),
             params: crate::Params::Json(params),
             auth: Some(auth.clone()),
         };
@@ -63,7 +63,7 @@ impl Channels {
      */
     pub async fn delete(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-channels/{}", handle),
+            path: format!("/video-channels/{handle}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -80,7 +80,7 @@ impl Channels {
         params: &crate::param::Videos,
     ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
-            path: format!("/video-channels/{}/videos", handle),
+            path: format!("/video-channels/{handle}/videos"),
             params: crate::Params::Query(params),
             auth: None,
         };
@@ -98,7 +98,7 @@ impl Channels {
         avatarfile: &str,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-channels/{}/avatar/pick", handle),
+            path: format!("/video-channels/{handle}/avatar/pick"),
             params: crate::Params::upload((), "avatarfile", avatarfile)?,
             auth: Some(auth.clone()),
         };
@@ -117,7 +117,7 @@ impl Channels {
         handle: &str,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-channels/{}/avatar", handle),
+            path: format!("/video-channels/{handle}/avatar"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

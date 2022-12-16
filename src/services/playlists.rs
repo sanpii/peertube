@@ -58,7 +58,7 @@ impl Playlists {
         id: &str,
     ) -> crate::Result<crate::data::Playlist> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}", id),
+            path: format!("/video-playlists/{id}"),
             params: crate::Params::none(),
             auth: auth.cloned(),
         };
@@ -76,7 +76,7 @@ impl Playlists {
         params: &crate::param::PlaylistSetting,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}", id),
+            path: format!("/video-playlists/{id}"),
             params: crate::Params::multipart(params)?,
             auth: Some(auth.clone()),
         };
@@ -89,7 +89,7 @@ impl Playlists {
      */
     pub async fn delete(&self, auth: &crate::data::Token, id: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}", id),
+            path: format!("/video-playlists/{id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -106,7 +106,7 @@ impl Playlists {
         id: &str,
     ) -> crate::Result<crate::Pager<crate::data::Video>> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}/videos", id),
+            path: format!("/video-playlists/{id}/videos"),
             params: crate::Params::none(),
             auth: auth.cloned(),
         };
@@ -124,7 +124,7 @@ impl Playlists {
         element: &crate::param::PlaylistElement,
     ) -> crate::Result<crate::data::NewContent> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}/videos", id),
+            path: format!("/video-playlists/{id}/videos"),
             params: crate::Params::Json(element),
             auth: Some(auth.clone()),
         };
@@ -142,7 +142,7 @@ impl Playlists {
         reorder: &crate::param::Reorder,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}/videos/reorder", id),
+            path: format!("/video-playlists/{id}/videos/reorder"),
             params: crate::Params::Json(reorder),
             auth: Some(auth.clone()),
         };
@@ -162,7 +162,7 @@ impl Playlists {
         element: &crate::param::PlaylistElement,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}/videos/{}", id, element.video_id),
+            path: format!("/video-playlists/{id}/videos/{}", element.video_id),
             params: crate::Params::Json(element),
             auth: Some(auth.clone()),
         };
@@ -180,7 +180,7 @@ impl Playlists {
         element_id: &str,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/video-playlists/{}/videos/{}", id, element_id),
+            path: format!("/video-playlists/{id}/videos/{element_id}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

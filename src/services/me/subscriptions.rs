@@ -90,7 +90,7 @@ impl Subscriptions {
         handle: &str,
     ) -> crate::Result<crate::data::Subscription> {
         let request = crate::Request {
-            path: format!("/users/me/subscriptions/{}", handle),
+            path: format!("/users/me/subscriptions/{handle}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
@@ -103,7 +103,7 @@ impl Subscriptions {
      */
     pub async fn delete(&self, auth: &crate::data::Token, handle: &str) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/users/me/subscriptions/{}", handle),
+            path: format!("/users/me/subscriptions/{handle}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };

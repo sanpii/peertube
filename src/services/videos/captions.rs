@@ -13,11 +13,7 @@ impl Captions {
      * List captions of a video.
      */
     pub async fn all(&self, video_id: &str) -> crate::Result<crate::Pager<crate::data::Caption>> {
-        crate::Api::get(
-            &self.config,
-            format!("/videos/{}/captions", video_id).into(),
-        )
-        .await
+        crate::Api::get(&self.config, format!("/videos/{video_id}/captions").into()).await
     }
 
     /**
@@ -31,7 +27,7 @@ impl Captions {
         captionfile: &str,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}/captions/{}", video_id, language),
+            path: format!("/videos/{video_id}/captions/{language}"),
             params: crate::Params::upload((), "captionfile", captionfile)?,
             auth: Some(auth.clone()),
         };
@@ -49,7 +45,7 @@ impl Captions {
         language: &str,
     ) -> crate::Result<()> {
         let request = crate::Request {
-            path: format!("/videos/{}/captions/{}", video_id, language),
+            path: format!("/videos/{video_id}/captions/{language}"),
             params: crate::Params::none(),
             auth: Some(auth.clone()),
         };
