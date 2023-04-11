@@ -238,7 +238,7 @@ mod test {
     }
 
     pub(crate) async fn api() -> (crate::Api, crate::data::Token) {
-        dotenv::dotenv().ok();
+        dotenvy::dotenv().ok();
         env_logger::try_init().ok();
 
         let api = crate::Api::new(&instance());
