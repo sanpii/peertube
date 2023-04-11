@@ -17,7 +17,8 @@ thiserror = "1.0"
 
 [dependencies.chrono]
 version = "0.4"
-features = ["serde"]
+default-features = false
+features = ["clock", "serde", "std"]
 
 [dependencies.reqwest]
 version = "0.11"
