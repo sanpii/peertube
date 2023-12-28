@@ -651,3 +651,18 @@ pub struct Jobs {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_type: Option<crate::data::JobType>,
 }
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewRunner {
+    pub name: String,
+    pub registration_token: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Runner {
+    pub runner_token: String,
+}
