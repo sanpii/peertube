@@ -705,3 +705,22 @@ pub enum JobType {
     VideoRedundancy,
     VideoLiveEnding,
 }
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NewRunner {
+    pub id: u32,
+    pub runner_token: String,
+}
+
+#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Runner {
+    pub id: u32,
+    pub name: String,
+    pub description: String,
+    pub ip: String,
+    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub last_contact: chrono::DateTime<chrono::offset::Utc>,
+}
