@@ -2,13 +2,12 @@
 name = "peertube"
 version = "0.2.0"
 authors = ["Sanpi <sanpi@homecomputing.fr>"]
-edition = "2021"
+edition = "2024"
 description = "Peertube API client"
 license = "MIT"
 repository = "https://github.com/sanpii/peertube"
 categories = ["web-programming::http-client"]
 keywords = ["peertube"]
-rust-version = "1.62.0"
 
 [dependencies]
 serde_json = "1.0"
