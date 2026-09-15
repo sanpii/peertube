@@ -28,8 +28,8 @@ pub struct Account {
     pub host_redundancy_allowed: Option<bool>,
     pub following_count: u32,
     pub followers_count: u32,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
     pub display_name: String,
     pub description: Option<String>,
 }
@@ -49,8 +49,8 @@ pub struct AccountSummary {
 #[serde(rename_all = "camelCase")]
 pub struct Avatar {
     pub path: String,
-    pub created_at: Option<chrono::DateTime<chrono::offset::Utc>>,
-    pub updated_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub created_at: Option<jiff::ZonedDateTime>,
+    pub updated_at: Option<jiff::ZonedDateTime>,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -61,7 +61,7 @@ pub struct Video {
     pub blacklisted_reason: Option<String>,
     pub category: Category,
     pub channel: ChannelSummary,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     #[cfg(feature = "v5")]
     pub truncatedDescription: Option<String>,
     pub description: Option<String>,
@@ -76,14 +76,14 @@ pub struct Video {
     pub likes: u32,
     pub name: String,
     pub nsfw: bool,
-    pub originally_published_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub originally_published_at: Option<jiff::ZonedDateTime>,
     pub preview_path: String,
     pub privacy: Privacy,
-    pub published_at: chrono::DateTime<chrono::offset::Utc>,
+    pub published_at: jiff::ZonedDateTime,
     pub scheduled_update: Option<ScheduledUpdate>,
     pub state: Option<State>,
     pub thumbnail_path: String,
-    pub update_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub update_at: Option<jiff::ZonedDateTime>,
     pub user_history: Option<UserHistory>,
     pub uuid: String,
     pub views: u32,
@@ -197,7 +197,7 @@ pub struct User {
     pub no_welcome_modal: bool,
     pub blocked: bool,
     pub blocked_reason: Option<String>,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub account: Account,
     pub video_channels: Vec<ChannelSummary>,
 }
@@ -216,7 +216,7 @@ pub struct Channel {
     pub support: Option<String>,
     pub id: String,
     pub is_local: bool,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: jiff::ZonedDateTime,
     pub owner_account: AccountId,
 }
 
@@ -238,8 +238,8 @@ pub struct Import {
     pub torrent_name: Option<String>,
     pub state: State,
     pub error: Option<String>,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
     pub video: Video,
 }
 
@@ -268,7 +268,7 @@ pub struct Abuse {
     pub state: AbuseState,
     pub moderation_comment: String,
     pub video: VideoInfo,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
 }
 
 #[derive(Debug, serde_repr::Deserialize_repr, serde_repr::Serialize_repr)]
@@ -304,7 +304,7 @@ pub enum AbusePredefinedReason {
 #[serde(rename_all = "camelCase")]
 pub struct Subscription {
     pub avatar: Option<Avatar>,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub description: Option<String>,
     pub display_name: String,
     pub followers_count: u32,
@@ -316,7 +316,7 @@ pub struct Subscription {
     pub name: String,
     pub owner_account: Option<Account>,
     pub support: Option<String>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: jiff::ZonedDateTime,
     pub url: String,
 }
 
@@ -326,11 +326,11 @@ pub struct Notification {
     account: Option<AccountSummary>,
     //pub actor_follow: Option<>,
     pub comment: Option<CommentSummary>,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub id: u32,
     pub read: bool,
     pub r#type: UserNotificationType,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: jiff::ZonedDateTime,
     pub video: Option<VideoInfo>,
     //pub video_abuse: Option<>,
     //pub video_blacklist: Option<>,
@@ -448,7 +448,7 @@ pub struct Thread {
 #[serde(rename_all = "camelCase")]
 pub struct Comment {
     pub account: Option<Account>,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub id: u32,
     pub in_reply_to_comment_id: Option<u32>,
     pub text: String,
@@ -456,8 +456,8 @@ pub struct Comment {
     pub total_replies: u32,
     pub total_replies_from_video_author: u32,
     pub is_deleted: bool,
-    pub deleted_at: Option<chrono::DateTime<chrono::offset::Utc>>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub deleted_at: Option<jiff::ZonedDateTime>,
+    pub updated_at: jiff::ZonedDateTime,
     pub url: String,
     pub video_id: u32,
 }
@@ -465,7 +465,7 @@ pub struct Comment {
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Playlist {
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub description: Option<String>,
     pub display_name: String,
     pub id: u32,
@@ -474,7 +474,7 @@ pub struct Playlist {
     pub privacy: Privacy,
     pub thumbnail_path: Option<String>,
     pub r#type: PlaylistType,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub updated_at: jiff::ZonedDateTime,
     pub uuid: String,
     pub video_channel: Option<ChannelSummary>,
     pub videos_length: u32,
@@ -520,9 +520,9 @@ pub struct FileRedundancyInformation {
     pub id: u32,
     pub file_url: String,
     pub strategy: Strategy,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
-    pub expires_on: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
+    pub expires_on: jiff::ZonedDateTime,
     pub size: u64,
 }
 
@@ -541,14 +541,14 @@ pub struct AbuseMessage {
     pub id: u32,
     pub message: String,
     pub by_moderator: bool,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub account: AccountSummary,
 }
 
 #[derive(Debug, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VideoBlacklist {
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub description: String,
     pub dislikes: u32,
     pub duration: u32,
@@ -565,7 +565,7 @@ pub struct VideoBlacklist {
 #[serde(rename_all = "camelCase")]
 pub struct BlockedServer {
     pub by_account: Account,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
     pub blocked_server: Server,
 }
 
@@ -580,7 +580,7 @@ pub struct Server {
 pub struct BlockedAccount {
     pub by_account: Account,
     pub blocked_account: Account,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
@@ -597,8 +597,8 @@ pub struct Follow {
     pub state: FollowState,
     pub follower: Account,
     pub following: Account,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize)]
@@ -621,8 +621,8 @@ pub struct Plugin {
     pub description: String,
     pub homepage: String,
     //pub settings: (),
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
 }
 
 #[derive(Debug, serde::Deserialize)]
@@ -631,8 +631,8 @@ pub struct AvailablePlugin {
     pub npm_name: String,
     pub description: String,
     pub homepage: String,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
     pub popularity: f32,
     pub latest_version: String,
     pub installed: bool,
@@ -657,9 +657,9 @@ pub struct Job {
     pub r#type: JobType,
     pub data: (),
     pub error: Option<()>,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub finished_on: chrono::DateTime<chrono::offset::Utc>,
-    pub processed_on: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub finished_on: jiff::ZonedDateTime,
+    pub processed_on: jiff::ZonedDateTime,
 }
 
 #[derive(Clone, Copy, Debug, serde::Deserialize, serde::Serialize)]
@@ -720,7 +720,7 @@ pub struct Runner {
     pub name: String,
     pub description: String,
     pub ip: String,
-    pub created_at: chrono::DateTime<chrono::offset::Utc>,
-    pub updated_at: chrono::DateTime<chrono::offset::Utc>,
-    pub last_contact: chrono::DateTime<chrono::offset::Utc>,
+    pub created_at: jiff::ZonedDateTime,
+    pub updated_at: jiff::ZonedDateTime,
+    pub last_contact: jiff::ZonedDateTime,
 }

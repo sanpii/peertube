@@ -225,7 +225,7 @@ pub enum NotificationSettingsValue {
 
 #[derive(Debug, serde::Serialize)]
 pub(crate) struct History {
-    pub before_date: chrono::DateTime<chrono::offset::Utc>,
+    pub before_date: jiff::ZonedDateTime,
 }
 
 #[derive(Debug, Default, serde::Serialize)]
@@ -246,7 +246,7 @@ pub struct Video {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nsfw: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub originally_published_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub originally_published_at: Option<jiff::ZonedDateTime>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub previewfile: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -297,7 +297,7 @@ pub struct NewVideo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nsfw: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub originally_published_at: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub originally_published_at: Option<jiff::ZonedDateTime>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub previewfile: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -463,16 +463,16 @@ pub struct SearchVideos {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_max: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub end_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub end_date: Option<jiff::ZonedDateTime>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub originally_published_end_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub originally_published_end_date: Option<jiff::ZonedDateTime>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub originally_published_start_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub originally_published_start_date: Option<jiff::ZonedDateTime>,
     pub search: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search_target: Option<SearchTarget>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub start_date: Option<chrono::DateTime<chrono::offset::Utc>>,
+    pub start_date: Option<jiff::ZonedDateTime>,
 }
 
 #[derive(Debug, Default, serde::Serialize)]

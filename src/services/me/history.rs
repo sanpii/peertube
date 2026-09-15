@@ -32,10 +32,10 @@ impl History {
     pub async fn clear(
         &self,
         auth: &crate::data::Token,
-        before_date: &chrono::DateTime<chrono::offset::Utc>,
+        before_date: &jiff::ZonedDateTime,
     ) -> crate::Result<()> {
         let params = crate::param::History {
-            before_date: *before_date,
+            before_date: before_date.clone(),
         };
 
         let request = crate::Request {
@@ -72,7 +72,7 @@ mod test {
         let status = api
             .me
             .history
-            .clear(&token, &chrono::offset::Utc::now())
+            .clear(&token, &jiff::ZonedDateTime::now().with_time_zone(jiff::tz::TimeZone::UTC))
             .await;
 
         assert!(status.is_ok());
